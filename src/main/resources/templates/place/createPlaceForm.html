@@ -1,0 +1,125 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+    <title>장소 등록 예제 · Bootstrap v5.3</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+        body {
+            padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+        }
+
+        .image-preview {
+            max-width: 40%; /* 가로 크기 최대 100% */
+            height: auto; /* 높이 자동 조절 */
+            display: block;
+            margin-top: 15px; /* 미리보기 이미지 위에 약간의 간격 추가 */
+        }
+
+        .fieldError {
+            border-color: red;
+        }
+
+    </style>
+
+</head>
+
+<body>
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
+<!-- layout body -->
+<div th:replace="~{fragments/layout :: body}"></div>
+
+<main class="d-flex justify-content-center align-items-center">
+    <div class="row w-100 justify-content-center">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="pt-3">장소 등록</h4>
+            <form class="needs-validation" novalidate
+                  th:action="@{/place/createPlaceForm}" th:object="${placeForm}"
+                  method="post" enctype="multipart/form-data">
+
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="row g-3 pb-5">
+                            <div class="col-12">
+                                <label th:for="placeName">상호명</label>
+                                <input type="text" th:field="*{placeName}"
+                                       class="form-control" id="placeName" placeholder="이름"
+                                       th:class="${#fields.hasErrors('placeName')}? 'form-control fieldError' : 'form-control'">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">우편번호</label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{zipcodes}"
+                                           class="form-control" id="zipcodes" placeholder="12345"
+                                           th:class="${#fields.hasErrors('zipcodes')}? 'form-control fieldError' : 'form-control'">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">상세주소 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{street}"
+                                           class="form-control" id="street" placeholder="상세주소"
+                                           th:class="${#fields.hasErrors('street')}? 'form-control fieldError' : 'form-control'">
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">설명란 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{description}" class="form-control"
+                                           id="description" placeholder="설명란"
+                                           th:class="${#fields.hasErrors('description')}? 'form-control fieldError' : 'form-control'">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <!--                            <form class="needs-validation" novalidate th:action="@{/place/createPlaceForm}" th:object="${placeForm}" method="post" enctype="multipart/form-data">-->
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">이미지 등록</label>
+                                <div>
+                                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+
+                                </div>
+                                <img id="imagePreview" class="image-preview" src="#" alt="Image Preview"
+                                     style="display: none;">
+                            </div>
+                        </div>
+                        <!--                            </form>-->
+                    </div>
+                </div>
+                <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">장소 등록 완료</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+
+<script>
+    document.getElementById('image').onchange = function (event) {
+        var reader = new FileReader();
+        reader.onload = function () {
+            var output = document.getElementById('imagePreview');
+            output.src = reader.result;
+            output.style.display = 'block';
+        };
+        reader.readAsDataURL(event.target.files[0]);
+    };
+</script>
+
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+<script src="/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
+</body>
+</html>

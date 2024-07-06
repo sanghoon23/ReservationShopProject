@@ -1,0 +1,32 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<div class="container">
+    <div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>장소이름</th>
+                <th>우편번호</th>
+                <th>상세주소</th>
+                <th>설명란</th>
+                <th>이미지경로</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="place : ${places}">
+                <td th:text="${place.getPlaceName()}"></td>
+                <td th:text="${place.getAddress().getZipcodes()}"></td>
+                <td th:text="${place.getAddress().getStreet()}"></td>
+                <td th:text="${place.getDescription()}"></td>
+                <td th:text="${place.getImagePath()}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+</div> <!-- /container -->
+
+<div th:replace="fragments/footer :: footer"></div>
+</body>
+</html>
