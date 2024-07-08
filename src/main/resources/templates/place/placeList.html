@@ -8,6 +8,7 @@
             <tr>
                 <th>장소이름</th>
                 <th>우편번호</th>
+                <th>주소</th>
                 <th>상세주소</th>
                 <th>설명란</th>
                 <th>이미지경로</th>
@@ -16,8 +17,9 @@
             <tbody>
             <tr th:each="place : ${places}">
                 <td th:text="${place.getPlaceName()}"></td>
-                <td th:text="${place.getAddress().getZipcodes()}"></td>
-                <td th:text="${place.getAddress().getStreet()}"></td>
+                <td th:text="${place.getAddress().getPostcodes()}"></td>
+                <td th:text="${place.getAddress().getAddress()}"></td>
+                <td th:text="${place.getAddress().getDetailAddress()}"></td>
                 <td th:text="${place.getDescription()}"></td>
                 <td th:text="${place.getImagePath()}"></td>
             </tr>

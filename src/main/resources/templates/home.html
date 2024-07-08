@@ -29,8 +29,9 @@
 
         body {
             font-family: Arial, sans-serif;
-            background-color: #f9f9f9;
+            background-color: #3d3d4b;
             margin: 0;
+            min-height: 100vh;
         }
         .container {
             text-align: center;
@@ -46,8 +47,8 @@
             gap: 20px;
         }
         .grid-item {
-            background-color: white;
-            border: 1px solid #ddd;
+            background-color: rgba(34, 37, 39, 0.6);
+            border: 1px solid #100c0c;
             border-radius: 15px;
             padding: 20px;
             text-align: center;
@@ -65,10 +66,6 @@
         .grid-item p {
             margin: 0;
             font-size: 16px;
-        }
-        .navbar {
-            background-color: black;
-            color: white;
         }
         main {
             padding: 20px;
@@ -141,39 +138,22 @@
 
         <!-- Tab Contents -->
         <div class="container">
-            <div class="title">예약 TREND PICK</div>
             <div class="grid">
                 <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="1만원혜택">
-                    <p>1만원혜택</p>
+                    <img src="/images/category/categoryImage_beauty.png" alt="뷰티">
+                    <p>뷰티</p>
                 </div>
                 <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="카페맛집">
-                    <p>카페맛집</p>
+                    <img src="/images/category/categoryImage_restaurant.png" alt="식당/카페">
+                    <p>식당/카페</p>
                 </div>
                 <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="주변헤어샵">
-                    <p>주변헤어샵</p>
+                    <img src="/images/category/categoryImage_accomodation.png" alt="숙박">
+                    <p>숙박</p>
                 </div>
                 <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="테마파크">
-                    <p>테마파크</p>
-                </div>
-                <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="워터파크">
-                    <p>워터파크</p>
-                </div>
-                <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="아쿠아리움">
-                    <p>아쿠아리움</p>
-                </div>
-                <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="여름 캠핑">
-                    <p>여름 캠핑</p>
-                </div>
-                <div class="grid-item">
-                    <img src="https://via.placeholder.com/40" alt="주말브런치">
-                    <p>주말브런치</p>
+                    <img src="/images/category/categoryImage_concert.png" alt="공연">
+                    <p>전시</p>
                 </div>
             </div>
         </div>
@@ -189,6 +169,8 @@
         <button th:onclick="|location.href='@{/place/placeList}'|"
                 class="btn btn-primary rounded-pill px-3" type="button">장소목록 보기</button>
 
+        <button th:onclick="|location.href='@{/place/kakaoMapAPITest}'|"
+                class="btn btn-primary rounded-pill px-3" type="button">카카오맵API TEST</button>
 
 
     </main>

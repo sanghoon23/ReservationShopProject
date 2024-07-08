@@ -24,7 +24,7 @@ public class Place {
     protected  Place() {}
     public Place(PlaceForm form) {
         this.placeName = form.getPlaceName();
-        this.address = new Address(form.getZipcodes(), form.getStreet());
+        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
         this.description = form.getDescription();
         this.imagePath = form.getImagePath();
     }

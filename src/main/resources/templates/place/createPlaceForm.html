@@ -11,6 +11,11 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
+    <!-- 주소 API -->
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/js/daumPostcode.js"></script>
+
+
     <style>
         body {
             padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
@@ -58,19 +63,32 @@
                             <div class="col-12">
                                 <label class="form-label">우편번호</label>
                                 <div class="input-group has-validation">
-                                    <input type="text" th:field="*{zipcodes}"
-                                           class="form-control" id="zipcodes" placeholder="12345"
-                                           th:class="${#fields.hasErrors('zipcodes')}? 'form-control fieldError' : 'form-control'">
+                                    <input type="text" th:field="*{postcodes}"
+                                           class="form-control" id="postcodes" placeholder="12345"
+                                           th:class="${#fields.hasErrors('postcodes')}? 'form-control fieldError' : 'form-control'">
+
+                                    <input type="button" onclick="daumPostcode()" value="우편번호 찾기"><br>
+
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label class="form-label">상세주소 <span class="text-body-secondary"></span></label>
+                                <label class="form-label">주소 <span class="text-body-secondary"></span></label>
                                 <div class="input-group has-validation">
-                                    <input type="text" th:field="*{street}"
-                                           class="form-control" id="street" placeholder="상세주소"
-                                           th:class="${#fields.hasErrors('street')}? 'form-control fieldError' : 'form-control'">
+                                    <input type="text" th:field="*{address}"
+                                           class="form-control" id="address" placeholder="주소"
+                                           th:class="${#fields.hasErrors('address')}? 'form-control fieldError' : 'form-control'">
                                 </div>
                             </div>
+
+                            <div class="col-12">
+                                <label class="form-label">상세주소 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{detailAddress}"
+                                           class="form-control" id="detailAddress" placeholder="상세주소"
+                                           th:class="${#fields.hasErrors('detailAddress')}? 'form-control fieldError' : 'form-control'">
+                                </div>
+                            </div>
+
                             <div class="col-12">
                                 <label class="form-label">설명란 <span class="text-body-secondary"></span></label>
                                 <div class="input-group has-validation">

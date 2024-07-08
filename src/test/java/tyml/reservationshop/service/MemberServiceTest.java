@@ -22,7 +22,7 @@ class MemberServiceTest {
     public void 회원가입_테스트() {
 
         MemberForm form = new MemberForm();
-        Address address = new Address("123", "서울특별시");
+        Address address = new Address("123", "서울특별시","123");
         Member member = new Member(form);
         memberService.join(member);
     }

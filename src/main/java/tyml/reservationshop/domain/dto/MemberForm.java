@@ -29,10 +29,13 @@ public class MemberForm {
     private String email;
 
     @NotEmpty(message = "")
-    private String zipcodes;
+    private String postcodes;
 
     @NotEmpty(message = "")
-    private String street;
+    private String address;
+
+    @NotEmpty(message = "")
+    private String detailAddress;
 
     public static String generateRandomId() {
         int length = new Random().nextInt(3) + 5; // 5에서 7 사이의 길이 선택
