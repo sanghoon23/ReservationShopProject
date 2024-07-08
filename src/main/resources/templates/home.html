@@ -27,6 +27,54 @@
             height: 400px;
         }
 
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+        .grid-item {
+            background-color: white;
+            border: 1px solid #ddd;
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s;
+        }
+        .grid-item:hover {
+            transform: translateY(-5px);
+        }
+        .grid-item img {
+            width: 40px;
+            height: 40px;
+            margin-bottom: 10px;
+        }
+        .grid-item p {
+            margin: 0;
+            font-size: 16px;
+        }
+        .navbar {
+            background-color: black;
+            color: white;
+        }
+        main {
+            padding: 20px;
+        }
+
+
     </style>
 
 
@@ -79,7 +127,6 @@
         <!-- Main Container -->
         <div id='fooW' class="container">
 
-            <h1>Place List</h1>
             <div th:each="place : ${places}">
                 <div class="card mb-3">
                     <div class="card-body">
@@ -90,25 +137,49 @@
                 </div>
             </div>
 
-            <!-- Pagination -->
-<!--            <nav>-->
-<!--                <ul class="pagination">-->
-<!--                    <li class="page-item" th:classappend="${currentPage == 0} ? 'disabled'">-->
-<!--                        <a class="page-link" th:href="@{/places(page=${currentPage - 1}, size=${size})}">Previous</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item" th:each="i : ${#numbers.sequence(0, totalPages - 1)}" th:classappend="${i == currentPage} ? 'active'">-->
-<!--                        <a class="page-link" th:href="@{/places(page=${i}, size=${size})}" th:text="${i + 1}">1</a>-->
-<!--                    </li>-->
-<!--                    <li class="page-item" th:classappend="${currentPage + 1 == totalPages} ? 'disabled'">-->
-<!--                        <a class="page-link" th:href="@{/places(page=${currentPage + 1}, size=${size})}">Next</a>-->
-<!--                    </li>-->
-<!--                </ul>-->
-<!--            </nav>-->
-
         </div>
 
+        <!-- Tab Contents -->
+        <div class="container">
+            <div class="title">예약 TREND PICK</div>
+            <div class="grid">
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="1만원혜택">
+                    <p>1만원혜택</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="카페맛집">
+                    <p>카페맛집</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="주변헤어샵">
+                    <p>주변헤어샵</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="테마파크">
+                    <p>테마파크</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="워터파크">
+                    <p>워터파크</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="아쿠아리움">
+                    <p>아쿠아리움</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="여름 캠핑">
+                    <p>여름 캠핑</p>
+                </div>
+                <div class="grid-item">
+                    <img src="https://via.placeholder.com/40" alt="주말브런치">
+                    <p>주말브런치</p>
+                </div>
+            </div>
+        </div>
+        <!-- @Tab Contents -->
 
-<!--        &lt;!&ndash; test &ndash;&gt;-->
+
         <button th:onclick="|location.href='@{/members/memberList}'|"
                 class="btn btn-primary rounded-pill px-3" type="button">회원목록 보기</button>
 
@@ -118,14 +189,13 @@
         <button th:onclick="|location.href='@{/place/placeList}'|"
                 class="btn btn-primary rounded-pill px-3" type="button">장소목록 보기</button>
 
-<!--        <button th:onclick="|location.href='@{/members/memberList}'|"-->
-<!--                class="btn btn-primary rounded-pill px-3" type="button">상호 등록</button>-->
 
 
     </main>
 
-    <!-- footer -->
-    <div th:replace="~{fragments/footer :: footer}"></div>
+
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 
 <script src="/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>

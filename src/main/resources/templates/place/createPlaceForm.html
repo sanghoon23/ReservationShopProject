@@ -14,6 +14,7 @@
     <style>
         body {
             padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+            min-height: 100vh;
         }
 
         .image-preview {
@@ -32,12 +33,12 @@
 </head>
 
 <body>
-<!-- header -->
-<div th:replace="~{fragments/bodyHeader :: header}"></div>
 <!-- layout body -->
 <div th:replace="~{fragments/layout :: body}"></div>
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
 
-<main class="d-flex justify-content-center align-items-center">
+<main class="w-100 m-auto">
     <div class="row w-100 justify-content-center">
         <div class="col-md-7 col-lg-8">
             <h4 class="pt-3">장소 등록</h4>
@@ -45,7 +46,7 @@
                   th:action="@{/place/createPlaceForm}" th:object="${placeForm}"
                   method="post" enctype="multipart/form-data">
 
-                <div class="row">
+                <div class="row g-3 pb-5">
                     <div class="col-md-8">
                         <div class="row g-3 pb-5">
                             <div class="col-12">
@@ -93,15 +94,16 @@
                                      style="display: none;">
                             </div>
                         </div>
-                        <!--                            </form>-->
                     </div>
+                    <button class="w-100 btn btn-primary btn-lg" type="submit">장소 등록 완료</button>
                 </div>
-                <button class="w-100 btn btn-primary btn-lg mt-3" type="submit">장소 등록 완료</button>
             </form>
         </div>
     </div>
 </main>
 
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
 
 <script>
     document.getElementById('image').onchange = function (event) {
@@ -115,8 +117,6 @@
     };
 </script>
 
-<!-- footer -->
-<div th:replace="~{fragments/footer :: footer}"></div>
 <script src="/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
