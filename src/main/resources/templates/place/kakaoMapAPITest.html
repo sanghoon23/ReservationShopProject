@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>주소 검색 후 지도에 표시</title>
+    <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e87d74a796662fb3a8f10f714110bb02&libraries=services"></script>
+    <script src="/js/kakaoMapFunction.js"></script>
+
+    <style>
+        #map {
+            width: 100%;
+            height: 400px;
+        }
+    </style>
+</head>
+<body>
+<input type="text" id="address" placeholder="주소를 입력하세요">
+<button onclick="searchAddress()">검색</button>
+<div id="map"></div>
+</body>
+</html>
