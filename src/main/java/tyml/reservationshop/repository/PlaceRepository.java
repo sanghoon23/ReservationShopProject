@@ -39,4 +39,10 @@ public class PlaceRepository {
                 .getSingleResult();
     }
 
+    public List<Place> findByCategory(String category) {
+        return em.createQuery("select p from Place p where p.category = :category", Place.class)
+                .setParameter("category", category)
+                .getResultList();
+    }
+
 }

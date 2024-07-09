@@ -142,18 +142,26 @@
                 <div class="grid-item">
                     <img src="/images/category/categoryImage_beauty.png" alt="뷰티">
                     <p>뷰티</p>
+                    <button th:onclick="|location.href='@{/category/뷰티}'|"
+                            class="btn" type="button">뷰티 보기</button>
                 </div>
                 <div class="grid-item">
                     <img src="/images/category/categoryImage_restaurant.png" alt="식당/카페">
                     <p>식당/카페</p>
+                    <button th:onclick="|location.href='@{/category/식당카페}'|"
+                            class="btn" type="button">식당/카페 보기</button>
                 </div>
                 <div class="grid-item">
                     <img src="/images/category/categoryImage_accomodation.png" alt="숙박">
                     <p>숙박</p>
+                    <button th:onclick="|location.href='@{/category/숙박}'|"
+                            class="btn" type="button">숙박 보기</button>
                 </div>
                 <div class="grid-item">
-                    <img src="/images/category/categoryImage_concert.png" alt="공연">
-                    <p>전시</p>
+                    <img src="/images/category/categoryImage_concert.png" alt="공연/전시">
+                    <p>공연/전시</p>
+                    <button th:onclick="|location.href='@{/category/공연전시}'|"
+                            class="btn" type="button">전시 보기</button>
                 </div>
             </div>
         </div>

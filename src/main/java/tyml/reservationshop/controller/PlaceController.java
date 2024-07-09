@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
@@ -21,6 +22,8 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -30,11 +33,15 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    @ModelAttribute("categories")
+    public List<String> categories() {
+        return Arrays.asList("뷰티", "식당카페", "숙박", "공연전시");
+    }
+
     @GetMapping("/place/createPlaceForm")
     public String createPlaceForm(Model model) {
 
         model.addAttribute("placeForm", new PlaceForm());
-
         return "/place/createPlaceForm";
     }
 
@@ -54,10 +61,6 @@ public class PlaceController {
         }
         Place place = new Place(placeForm);
         Long placeId = placeService.join(place);
-
-        log.info("ImagePath : {}", placeForm.getImagePath());
-        log.info("ImagePath in DB : {}", placeService.findByPlaceImagePath(placeId));
-
 
         return "home";
     }

@@ -39,5 +39,9 @@ public class PlaceService {
         return placeRepository.findByPlaceImagePath(placeId);
     }
 
+    public List<Place> findByCategory(String category) {
+        return placeRepository.findByCategory(category);
+    }
+
 
 }

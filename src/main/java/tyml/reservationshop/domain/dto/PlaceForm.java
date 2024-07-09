@@ -28,4 +28,8 @@ public class PlaceForm {
     private String description;
 
     private String imagePath;
+
+    @NotEmpty(message = "")
+    private String category;
+
 }

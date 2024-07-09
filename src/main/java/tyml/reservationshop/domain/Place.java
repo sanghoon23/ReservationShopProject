@@ -21,12 +21,15 @@ public class Place {
 
     private String imagePath;
 
+    private String category;
+
     protected  Place() {}
     public Place(PlaceForm form) {
         this.placeName = form.getPlaceName();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
         this.description = form.getDescription();
         this.imagePath = form.getImagePath();
+        this.category = form.getCategory();
     }
 
 }

@@ -59,6 +59,15 @@
                                 <input type="text" th:field="*{placeName}"
                                        class="form-control" id="placeName" placeholder="이름"
                                        th:class="${#fields.hasErrors('placeName')}? 'form-control fieldError' : 'form-control'">
+
+                                <div class="category-container">
+                                    <label th:for="category">카테고리 분류</label>
+                                    <select id="category" th:field="*{category}" th:value="카테고리">
+                                        <option value="">카테고리 분류</option>
+                                        <option th:each="category : ${categories}" th:value="${category}" th:text="${category}">카테고리</option>
+                                    </select>
+                                </div>
+
                             </div>
                             <div class="col-12">
                                 <label class="form-label">우편번호</label>
