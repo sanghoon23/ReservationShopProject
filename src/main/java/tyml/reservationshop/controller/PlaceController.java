@@ -6,7 +6,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,7 +23,6 @@ import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 @Slf4j
 @Controller
@@ -72,7 +70,7 @@ public class PlaceController {
             String fileName = System.currentTimeMillis() + "_" + originalFilename;
 
             // Specify the path to save the file
-            String uploadDir = "C:\\imageTest";
+            String uploadDir = "D:\\_Dev\\Lecture\\Java\\IntelliJ\\Spring\\Portfolio\\reservationShop\\src\\main\\resources\\static\\images\\upload";
             File uploadPath = new File(uploadDir);
 
             if (!uploadPath.exists()) {
@@ -83,7 +81,8 @@ public class PlaceController {
             Path filePath = Paths.get(uploadDir, fileName);
             Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-            return filePath.toString();
+//            return filePath.toString();
+            return fileName;
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + image.getOriginalFilename(), e);
         }
@@ -92,7 +91,7 @@ public class PlaceController {
     @GetMapping("/place/placeList")
     public String placeList(Model model) {
         model.addAttribute("places", placeService.findAll());
-        return "place/placeList";
+        return "/place/placeList";
     }
 
 }

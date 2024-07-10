@@ -19,6 +19,7 @@ public class CategoryAtPlaceController {
     public String categoryList(@PathVariable("categoryName") String categoryName, Model model) {
 
         model.addAttribute("places", placeService.findByCategory(categoryName));
-        return "/place/placeList";
+        model.addAttribute("categoryName", categoryName);
+        return "/place/categoryPlaceList";
     }
 }
