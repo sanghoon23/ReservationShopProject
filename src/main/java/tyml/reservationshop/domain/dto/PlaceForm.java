@@ -27,7 +27,7 @@ public class PlaceForm {
     @NotEmpty(message = "")
     private String description;
 
-    private String imagePath;
+    private String uploadImageFileName;
 
     @NotEmpty(message = "")
     private String category;

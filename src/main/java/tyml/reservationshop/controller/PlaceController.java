@@ -3,6 +3,7 @@ package tyml.reservationshop.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -31,6 +32,9 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    @Value("${file.add}")
+    private String potoUploadPath;
+
     @ModelAttribute("categories")
     public List<String> categories() {
         return Arrays.asList("뷰티", "식당카페", "숙박", "공연전시");
@@ -55,7 +59,7 @@ public class PlaceController {
 
         // 이미지 삽입
         if (!image.isEmpty()) {
-            placeForm.setImagePath(saveImage(image));
+            placeForm.setUploadImageFileName(saveImage(image));
         }
         Place place = new Place(placeForm);
         Long placeId = placeService.join(place);
@@ -63,25 +67,23 @@ public class PlaceController {
         return "home";
     }
 
+    //@return : 이미지 파일 이름
     private String saveImage(MultipartFile image) {
         try {
-            // Create a unique file name
             String originalFilename = image.getOriginalFilename();
             String fileName = System.currentTimeMillis() + "_" + originalFilename;
 
-            // Specify the path to save the file
-            String uploadDir = "D:\\_Dev\\Lecture\\Java\\IntelliJ\\Spring\\Portfolio\\reservationShop\\src\\main\\resources\\static\\images\\upload";
+            String uploadDir = potoUploadPath;
+
             File uploadPath = new File(uploadDir);
 
             if (!uploadPath.exists()) {
                 uploadPath.mkdirs();
             }
 
-            // Save the file
             Path filePath = Paths.get(uploadDir, fileName);
             Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
 
-//            return filePath.toString();
             return fileName;
         } catch (IOException e) {
             throw new RuntimeException("Failed to store file " + image.getOriginalFilename(), e);

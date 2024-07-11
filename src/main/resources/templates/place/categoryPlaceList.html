@@ -62,10 +62,7 @@
         <li class="place-item" th:each="place : ${places}">
 
             <!-- TODO : test 중 -->
-            <img th:src="@{${place.getImagePath()}}" alt="...">
-
-            <!-- Thymeleaf 템플릿 내에서 임시로 출력 -->
-<!--            <p>Image path: <span th:text="${place.getImagePath()}"></span></p>-->
+            <img th:src="@{/upload/} + ${place.getUploadImageFileName()}">
 
             <div class="place-details">
                 <p class="place-title" th:text ="${place.getPlaceName()}"></p>

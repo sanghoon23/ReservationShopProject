@@ -19,7 +19,7 @@ public class Place {
 
     private String description;
 
-    private String imagePath;
+    private String uploadImageFileName;
 
     private String category;
 
@@ -28,7 +28,7 @@ public class Place {
         this.placeName = form.getPlaceName();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
         this.description = form.getDescription();
-        this.imagePath = form.getImagePath();
+        this.uploadImageFileName = form.getUploadImageFileName();
         this.category = form.getCategory();
     }
 
