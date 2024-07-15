@@ -17,11 +17,16 @@
             <tbody>
             <tr th:each="place : ${places}">
                 <td th:text="${place.getPlaceName()}"></td>
+                <td th:text="${place.getCategory()}"></td>
                 <td th:text="${place.getAddress().getPostcodes()}"></td>
                 <td th:text="${place.getAddress().getAddress()}"></td>
                 <td th:text="${place.getAddress().getDetailAddress()}"></td>
                 <td th:text="${place.getDescription()}"></td>
                 <td th:text="${place.getUploadImageFileName()}"></td>
+
+                <button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">수정</button>
+                <button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">삭제</button>
+
             </tr>
             </tbody>
         </table>

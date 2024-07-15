@@ -35,4 +35,9 @@ function searchAddress() {
             alert('주소 검색에 실패했습니다.');
         }
     });
+
 }
+//
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     searchAddress();
+// });

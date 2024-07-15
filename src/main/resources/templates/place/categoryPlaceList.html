@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>카페 맛집</title>
     <style>
         body {
@@ -11,6 +12,7 @@
             padding: 0;
             background-color: #f5f5f5;
         }
+
         .container {
             width: 100%;
             max-width: 600px;
@@ -19,56 +21,66 @@
             background-color: #ffffff;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
+
         .place-list {
             list-style: none;
             padding: 0;
             margin: 0;
         }
+
         .place-item {
             display: flex;
             align-items: center;
             padding: 10px;
             border-bottom: 1px solid #e0e0e0;
         }
+
         .place-item img {
-            width: 60px;
-            height: 60px;
+            width: 100px;
+            height: 120px;
             border-radius: 10%;
             margin-right: 10px;
         }
+
         .place-details {
             flex-grow: 1;
         }
+
         .place-title {
             font-size: 18px;
             font-weight: bold;
             margin: 0;
         }
+
         .place-address {
             font-size: 14px;
             color: #555555;
             margin: 5px 0;
         }
+
         .place-info {
             font-size: 12px;
             color: #888888;
         }
+
     </style>
 </head>
 <body>
 <div class="container">
-    <h1 th:text ="${categoryName}"></h1>
+    <h1 th:text="${categoryName}"></h1>
     <ul class="place-list" th:if="${places != null and !places.isEmpty()}">
-        <li class="place-item" th:each="place : ${places}">
 
-            <!-- TODO : test 중 -->
-            <img th:src="@{/upload/} + ${place.getUploadImageFileName()}">
+        <li class="place-item" th:each="place : ${places}">
+        <img th:src="@{/upload/} + ${place.getUploadImageFileName()}">
 
             <div class="place-details">
-                <p class="place-title" th:text ="${place.getPlaceName()}"></p>
-                <p class="place-address" th:text="${place.getAddress().getAddress()} + ', ' + ${place.getAddress().getDetailAddress()}"></p>
+            <a th:href="@{'/place/detail/' + ${place.getId()}}" th:text="${place.getPlaceName()}"></a>
+
+                <p class="place-address"
+                   th:text="${place.getAddress().getAddress()} + ', ' + ${place.getAddress().getDetailAddress()}"></p>
                 <p class="place-description" th:text="${place.getDescription()}"></p>
             </div>
+
         </li>
     </ul>
     <p class="no-places" th:if="${places == null or places.isEmpty()}">등록된 정보가 없습니다.</p>

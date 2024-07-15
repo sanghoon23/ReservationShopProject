@@ -34,7 +34,7 @@ public class PlaceRepository {
     }
 
     public String findByPlaceImagePath(Long placeId) {
-        return em.createQuery("select p.imagePath from Place p where p.id = :placeId", String.class)
+        return em.createQuery("select p.uploadImageFileName from Place p where p.id = :placeId", String.class)
                 .setParameter("placeId", placeId)
                 .getSingleResult();
     }

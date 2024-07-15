@@ -1,18 +1,18 @@
 package tyml.reservationshop.controller;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import tyml.reservationshop.domain.Place;
+import tyml.reservationshop.domain.dto.EmailSenderDto;
 import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.service.PlaceService;
 
@@ -94,6 +94,38 @@ public class PlaceController {
     public String placeList(Model model) {
         model.addAttribute("places", placeService.findAll());
         return "/place/placeList";
+    }
+
+    @GetMapping("/place/detail/{placeId}")
+    public String placeInfo(@PathVariable("placeId") Long placeId,  Model model) {
+
+        model.addAttribute("place", placeService.findOne(placeId));
+        return "/place/detail/placeInfo";
+    }
+
+    @GetMapping("/place/modifyPlaceForm/{placeId}")
+    public String modifyPlaceForm(@PathVariable("placeId") Long placeId, HttpSession session,  Model model) {
+
+        model.addAttribute("placeId", placeId);
+
+        Place place = placeService.findOne(placeId);
+
+        model.addAttribute("placeForm",
+                new PlaceForm(place));
+
+        return "/place/modifyPlaceForm";
+    }
+
+    @PostMapping("/place/modifyPlaceForm/{placeId}")
+    public String modifyPlaceForm(@PathVariable("placeId") Long placeId, @Valid PlaceForm placeForm, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            return "/place/modifyPlaceForm";
+        }
+
+        //TOdo : update
+
+        return "redirect:/place/placeList";
     }
 
 }
