@@ -45,4 +45,12 @@ public class PlaceRepository {
                 .getResultList();
     }
 
+    public void deletePlaceByPlaceId(Long placeId) {
+
+        em.createQuery("DELETE FROM Place p WHERE p.id = :placeId")
+                .setParameter("placeId", placeId)
+                .executeUpdate();
+
+    }
+
 }

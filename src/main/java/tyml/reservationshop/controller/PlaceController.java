@@ -67,29 +67,6 @@ public class PlaceController {
         return "home";
     }
 
-    //@return : 이미지 파일 이름
-    private String saveImage(MultipartFile image) {
-        try {
-            String originalFilename = image.getOriginalFilename();
-            String fileName = System.currentTimeMillis() + "_" + originalFilename;
-
-            String uploadDir = potoUploadPath;
-
-            File uploadPath = new File(uploadDir);
-
-            if (!uploadPath.exists()) {
-                uploadPath.mkdirs();
-            }
-
-            Path filePath = Paths.get(uploadDir, fileName);
-            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
-
-            return fileName;
-        } catch (IOException e) {
-            throw new RuntimeException("Failed to store file " + image.getOriginalFilename(), e);
-        }
-    }
-
     @GetMapping("/place/placeList")
     public String placeList(Model model) {
         model.addAttribute("places", placeService.findAll());
@@ -117,15 +94,57 @@ public class PlaceController {
     }
 
     @PostMapping("/place/modifyPlaceForm/{placeId}")
-    public String modifyPlaceForm(@PathVariable("placeId") Long placeId, @Valid PlaceForm placeForm, BindingResult bindingResult) {
+    public String modifyPlaceForm(@PathVariable("placeId") Long placeId,
+                                  @Valid PlaceForm placeForm,
+                                  BindingResult bindingResult,
+                                  @RequestParam("image") MultipartFile image) {
 
         if (bindingResult.hasErrors()) {
             return "/place/modifyPlaceForm";
         }
 
-        //TOdo : update
+        // 이미지 삽입
+        if (!image.isEmpty()) {
+            placeForm.setUploadImageFileName(saveImage(image));
+        }
+
+        placeService.updatePlace(placeId, placeForm);
 
         return "redirect:/place/placeList";
+    }
+
+    @GetMapping("/place/deletePlace/{placeId}")
+    public String deletePlace(@PathVariable("placeId") Long placeId) {
+
+        placeService.deletePlace(placeId);
+        return "redirect:/place/placeList";
+    }
+
+    /*
+****************************************************************************************************8
+     */
+
+    //@return : 이미지 파일 이름
+    private String saveImage(MultipartFile image) {
+        try {
+            String originalFilename = image.getOriginalFilename();
+            String fileName = System.currentTimeMillis() + "_" + originalFilename;
+
+            String uploadDir = potoUploadPath;
+
+            File uploadPath = new File(uploadDir);
+
+            if (!uploadPath.exists()) {
+                uploadPath.mkdirs();
+            }
+
+            Path filePath = Paths.get(uploadDir, fileName);
+            Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+
+            return fileName;
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to store file " + image.getOriginalFilename(), e);
+        }
     }
 
 }

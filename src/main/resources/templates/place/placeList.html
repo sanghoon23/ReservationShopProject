@@ -1,39 +1,79 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script src="/js/color-modes.js"></script>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+    <meta name="generator" content="Hugo 0.122.0">
+
+    <link href="/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
+    <style>
+
+        body {
+            padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            flex: 1;
+        }
+
+    </style>
+
+</head>
+
 <body>
-<div class="container">
-    <div>
-        <table class="table table-striped">
-            <thead>
-            <tr>
-                <th>장소이름</th>
-                <th>우편번호</th>
-                <th>주소</th>
-                <th>상세주소</th>
-                <th>설명란</th>
-                <th>이미지경로</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="place : ${places}">
-                <td th:text="${place.getPlaceName()}"></td>
-                <td th:text="${place.getCategory()}"></td>
-                <td th:text="${place.getAddress().getPostcodes()}"></td>
-                <td th:text="${place.getAddress().getAddress()}"></td>
-                <td th:text="${place.getAddress().getDetailAddress()}"></td>
-                <td th:text="${place.getDescription()}"></td>
-                <td th:text="${place.getUploadImageFileName()}"></td>
 
-                <button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">수정</button>
-                <button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">삭제</button>
+<!-- layout body -->
+<div th:replace="~{fragments/layout :: body}"></div>
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
 
-            </tr>
-            </tbody>
-        </table>
-    </div>
+    <main class="container">
+        <div class="row w-100 justify-content-center">
+            <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th>장소이름</th>
+                    <th>카테고리</th>
+                    <th>우편번호</th>
+                    <th>주소</th>
+                    <th>상세주소</th>
+                    <th>설명란</th>
+                    <th>이미지경로</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="place : ${places}">
+                    <td th:text="${place.getPlaceName()}"></td>
+                    <td th:text="${place.getCategory()}"></td>
+                    <td th:text="${place.getAddress().getPostcodes()}"></td>
+                    <td th:text="${place.getAddress().getAddress()}"></td>
+                    <td th:text="${place.getAddress().getDetailAddress()}"></td>
+                    <td th:text="${place.getDescription()}"></td>
+                    <td th:text="${place.getUploadImageFileName()}"></td>
 
-</div> <!-- /container -->
+                    <td><button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">수정</button></td>
+                    <td><button th:onclick="|location.href='@{/place/deletePlace/}' + ${place.getId()}|">삭제</button></td>
 
-<div th:replace="fragments/footer :: footer"></div>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </main>
+
+<!-- footer -->
+<div th:replace="~{fragments/footer :: footer}"></div>
+
+<script src="/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+
 </body>
 </html>

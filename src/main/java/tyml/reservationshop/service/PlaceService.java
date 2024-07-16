@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.Place;
+import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.PlaceRepository;
 
 import java.util.List;
@@ -21,6 +22,18 @@ public class PlaceService {
     public Long join(Place place) {
         placeRepository.save(place);
         return place.getId();
+    }
+
+    @Transactional
+    public void updatePlace(Long placeId, PlaceForm placeForm) {
+
+        Place findPlace = placeRepository.findOne(placeId);
+        findPlace.UpdatePlaceFromPlaceForm(placeForm);
+    }
+
+    @Transactional
+    public void deletePlace(Long placeId) {
+        placeRepository.deletePlaceByPlaceId(placeId);
     }
 
     public Place findOne(Long placeId) {
@@ -42,6 +55,7 @@ public class PlaceService {
     public List<Place> findByCategory(String category) {
         return placeRepository.findByCategory(category);
     }
+
 
 
 }
