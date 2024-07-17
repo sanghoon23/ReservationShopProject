@@ -1,11 +1,17 @@
-function searchAddress() {
-    var address = document.getElementById('address').value;
-
+function searchAddress(address) {
     // 주소-좌표 변환 객체를 생성합니다
     var geocoder = new kakao.maps.services.Geocoder();
 
+    if(address == null)
+    {
+        address = document.getElementById('address').value;
+    }
+
     // 주소로 좌표를 검색합니다
     geocoder.addressSearch(address, function (result, status) {
+
+        console.log('주소 검색 결과: ', result, '상태: ', status); // 결과와 상태 확인
+
         // 정상적으로 검색이 완료됐으면
         if (status === kakao.maps.services.Status.OK) {
 
