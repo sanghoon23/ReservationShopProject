@@ -43,8 +43,13 @@ public class Member {
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
     }
 
-    public void PrintLog(Member m) {
-
+    public void UpdateFromMemberForm(MemberForm form)
+    {
+        this.name = form.getName();
+        this.createId = form.getCreateId();
+        this.phoneNumber = form.getPhoneNumber();
+        this.email = form.getEmail();
+        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
     }
 
 }

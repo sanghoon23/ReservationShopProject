@@ -17,7 +17,7 @@ import java.util.UUID;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class GoogleLoginService {
+public class GoogleUserService {
 
     private String clientId;
     private String redirectUri;
@@ -27,10 +27,10 @@ public class GoogleLoginService {
     private final String GOOGLE_LOGOUT_URL_HOST ;
 
     @Autowired
-    public GoogleLoginService(@Value("${google.client_id}") String clientId,
-                              @Value("${google.redirect_uri}")  String redirectUri,
-                              @Value("${google.client_secret}")  String clientSecret,
-                              @Value("${google.scope}") String scope) {
+    public GoogleUserService(@Value("${google.client_id}") String clientId,
+                             @Value("${google.redirect_uri}")  String redirectUri,
+                             @Value("${google.client_secret}")  String clientSecret,
+                             @Value("${google.scope}") String scope) {
         this.clientId = clientId;
         this.redirectUri = redirectUri;
         this.clientSecret = clientSecret;
@@ -44,7 +44,7 @@ public class GoogleLoginService {
         //state 랜덤값 생성
         String state = UUID.randomUUID().toString();
 
-        GoogleTokenResponseDto googleTokenResponseDto = WebClient.create(GOOGLE_TOKEN_URL_HOST).post()
+        TokenResponseDto googleTokenResponseDto = WebClient.create(GOOGLE_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
                         .path("/token")
@@ -59,7 +59,7 @@ public class GoogleLoginService {
                 //TODO : Custom Exception
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
-                .bodyToMono(GoogleTokenResponseDto.class)
+                .bodyToMono(TokenResponseDto.class)
                 .block();
 
 

@@ -10,13 +10,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.util.UriComponents;
 import org.springframework.web.util.UriComponentsBuilder;
 import tyml.reservationshop.domain.dto.EmailSenderDto;
 import tyml.reservationshop.domain.dto.LoginForm;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.MemberForm;
+import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.service.MemberService;
 
 import java.net.URLEncoder;
@@ -175,6 +178,46 @@ public class MemberController {
         model.addAttribute("members", memberService.findAll());
         return "members/memberList";
     }
+
+    @GetMapping("/members/modifyMemberForm/{memberId}")
+    public String modifyMemberForm(@PathVariable("memberId") Long memberId, HttpSession session,  Model model) {
+
+        model.addAttribute("memberId", memberId);
+
+        Member member = memberService.findOne(memberId);
+        model.addAttribute("memberForm", new MemberForm(member));
+
+        return "/members/modifyMemberForm";
+    }
+
+    @PostMapping("/members/modifyMemberForm/{memberId}")
+    public String modifyMemberForm(@PathVariable("memberId") Long memberId,
+                                   @RequestParam(value = "cancel", required = false) String cancel,
+                                   @Valid MemberForm memberForm,
+                                   BindingResult bindingResult) {
+
+        if ("true".equals(cancel)) {
+            return "redirect:/members/memberList";
+        }
+
+        if (bindingResult.hasErrors()) {
+            return "/members/modifyMemberForm";
+        }
+
+        memberService.updateMember(memberId, memberForm);
+
+        return "redirect:/members/memberList";
+    }
+
+
+    @GetMapping("/members/deleteMember/{memberId}")
+    public String deleteMember(@PathVariable("memberId") Long memberId) {
+
+        memberService.deleteMember(memberId);
+        return "redirect:/members/memberList";
+    }
+
+
 
     //*************************************************************************
 

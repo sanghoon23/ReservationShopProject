@@ -13,8 +13,6 @@ public class PlaceForm {
     @NotEmpty(message = "")
     private String placeName;
 
-    //그림?
-
     @NotEmpty(message = "")
     private String postcodes;
 

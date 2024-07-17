@@ -4,6 +4,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
+import tyml.reservationshop.domain.Address;
+import tyml.reservationshop.domain.Member;
 
 import java.util.Random;
 
@@ -36,6 +38,24 @@ public class MemberForm {
 
     @NotEmpty(message = "")
     private String detailAddress;
+
+    public MemberForm() {}
+    public MemberForm(Member member) {
+
+        this.name = member.getName();
+        this.createId = member.getCreateId();
+        this.phoneNumber = member.getPhoneNumber();
+        this.email = member.getEmail();
+        this.postcodes = member.getAddress().getPostcodes();
+        this.address = member.getAddress().getAddress();
+        this.detailAddress = member.getAddress().getDetailAddress();
+
+    }
+
+
+    /*
+************************************************************************************************
+     */
 
     public static String generateRandomId() {
         int length = new Random().nextInt(3) + 5; // 5에서 7 사이의 길이 선택

@@ -3,7 +3,6 @@ package tyml.reservationshop.service;
 import io.netty.handler.codec.http.HttpHeaderValues;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -13,11 +12,12 @@ import reactor.core.publisher.Mono;
 import tyml.reservationshop.domain.dto.KakaoTokenResponseDto;
 import tyml.reservationshop.domain.dto.KakaoUserInfoResponseDto;
 import org.springframework.http.HttpStatusCode;
+import tyml.reservationshop.domain.dto.TokenResponseDto;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KakaoLoginService {
+public class KakaoUserService {
 
 
     private String clientId;
@@ -27,8 +27,8 @@ public class KakaoLoginService {
     private final String LOGOUT_REDIRECT_URI;
 
     @Autowired
-    public KakaoLoginService(@Value("${kakao.client_id}") String clientId,
-                             @Value("${kakao.logout_redirect_uri}") String logoutRedirectUri) {
+    public KakaoUserService(@Value("${kakao.client_id}") String clientId,
+                            @Value("${kakao.logout_redirect_uri}") String logoutRedirectUri) {
         this.clientId = clientId;
         KAUTH_TOKEN_URL_HOST ="https://kauth.kakao.com";
         KAUTH_USER_URL_HOST = "https://kapi.kakao.com";
@@ -38,7 +38,7 @@ public class KakaoLoginService {
 
     public String getAccessTokenFromKakao(String code) {
 
-        KakaoTokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
+        TokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
                         .path("/oauth/token")
@@ -51,7 +51,7 @@ public class KakaoLoginService {
                 //TODO : Custom Exception
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
-                .bodyToMono(KakaoTokenResponseDto.class)
+                .bodyToMono(TokenResponseDto.class)
                 .block();
 
 

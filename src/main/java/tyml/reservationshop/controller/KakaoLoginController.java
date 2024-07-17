@@ -1,24 +1,19 @@
 package tyml.reservationshop.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.KakaoUserInfoResponseDto;
 import tyml.reservationshop.domain.dto.MemberForm;
-import tyml.reservationshop.service.KakaoLoginService;
+import tyml.reservationshop.service.KakaoUserService;
 import tyml.reservationshop.service.MemberService;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @Slf4j
@@ -27,13 +22,13 @@ import java.util.Optional;
 public class KakaoLoginController {
 
     private final MemberService memberService;
-    private final KakaoLoginService kakaoLoginService;
+    private final KakaoUserService kakaoUserService;
 
     @GetMapping("/oauth2/callback/kakao")
     public void kakaoLogin(@RequestParam("code") String code, HttpSession session, HttpServletResponse response) throws IOException {
-        String accessToken = kakaoLoginService.getAccessTokenFromKakao(code);
+        String accessToken = kakaoUserService.getAccessTokenFromKakao(code);
 
-        KakaoUserInfoResponseDto userInfo = kakaoLoginService.getUserInfo(accessToken);
+        KakaoUserInfoResponseDto userInfo = kakaoUserService.getUserInfo(accessToken);
 
         String userName = userInfo.getKakaoAccount().getProfile().getNickName();
         String userEmail = userInfo.getKakaoAccount().email;
@@ -67,7 +62,7 @@ public class KakaoLoginController {
 
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
-            kakaoLoginService.logoutFromKakao(accessToken);
+            kakaoUserService.logoutFromKakao(accessToken);
         }
 
         // 세션 무효화
@@ -82,7 +77,7 @@ public class KakaoLoginController {
 
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
-            kakaoLoginService.unlinkFromKakao(accessToken);
+            kakaoUserService.unlinkFromKakao(accessToken);
         }
 
         // 세션 무효화

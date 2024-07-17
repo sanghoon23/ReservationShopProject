@@ -28,7 +28,7 @@ public class PlaceService {
     public void updatePlace(Long placeId, PlaceForm placeForm) {
 
         Place findPlace = placeRepository.findOne(placeId);
-        findPlace.UpdatePlaceFromPlaceForm(placeForm);
+        findPlace.UpdateFromPlaceForm(placeForm);
     }
 
     @Transactional

@@ -2,7 +2,6 @@ package tyml.reservationshop.controller;
 
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,9 +9,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.GoogleUserInfoResponseDto;
-import tyml.reservationshop.domain.dto.KakaoUserInfoResponseDto;
 import tyml.reservationshop.domain.dto.MemberForm;
-import tyml.reservationshop.service.GoogleLoginService;
+import tyml.reservationshop.service.GoogleUserService;
 import tyml.reservationshop.service.MemberService;
 
 import java.io.IOException;
@@ -24,13 +22,13 @@ import java.util.Optional;
 public class GoogleLoginController {
 
     private final MemberService memberService;
-    private final GoogleLoginService googleLoginService;
+    private final GoogleUserService googleUserService;
 
     @GetMapping("/oauth2/callback/google")
     public void googleLogin(@RequestParam("code") String code, HttpSession session, HttpServletResponse response) throws IOException {
-        String accessToken = googleLoginService.getAccessTokenFromGoogle(code);
+        String accessToken = googleUserService.getAccessTokenFromGoogle(code);
 
-        GoogleUserInfoResponseDto userInfo = googleLoginService.getUserInfo(accessToken);
+        GoogleUserInfoResponseDto userInfo = googleUserService.getUserInfo(accessToken);
 
         String userEmail = userInfo.getEmail();
 
@@ -60,7 +58,7 @@ public class GoogleLoginController {
 
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
-            googleLoginService.logoutFromGoogle(accessToken);
+            googleUserService.logoutFromGoogle(accessToken);
         }
 
         // 세션 무효화

@@ -86,18 +86,21 @@ public class PlaceController {
         model.addAttribute("placeId", placeId);
 
         Place place = placeService.findOne(placeId);
-
-        model.addAttribute("placeForm",
-                new PlaceForm(place));
+        model.addAttribute("placeForm", new PlaceForm(place));
 
         return "/place/modifyPlaceForm";
     }
 
     @PostMapping("/place/modifyPlaceForm/{placeId}")
     public String modifyPlaceForm(@PathVariable("placeId") Long placeId,
+                                  @RequestParam(value = "cancel", required = false) String cancel,
                                   @Valid PlaceForm placeForm,
                                   BindingResult bindingResult,
                                   @RequestParam("image") MultipartFile image) {
+
+        if ("true".equals(cancel)) {
+            return "redirect:/place/placeList";
+        }
 
         if (bindingResult.hasErrors()) {
             return "/place/modifyPlaceForm";

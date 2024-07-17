@@ -5,6 +5,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Member;
+import tyml.reservationshop.domain.Place;
+import tyml.reservationshop.domain.dto.MemberForm;
+import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.MemberRepository;
 
 import java.util.List;
@@ -25,15 +28,19 @@ public class MemberService {
         return member.getId();
     }
 
-//    private void validateDuplicateMember(Member member) {
-//        //EXCEPTION
-//        List<Member> findMembers = memberRepository.findByName(member.getName());
-//        if (!findMembers.isEmpty()) {
-//            throw new IllegalStateException("이미 존재하는 회원입니다.");
-//        }
-//    }
-//
-//
+    @Transactional
+    public void updateMember(Long memberId, MemberForm memberForm) {
+
+        Member findMember = memberRepository.findOne(memberId);
+        findMember.UpdateFromMemberForm(memberForm);
+    }
+
+
+    @Transactional
+    public void deleteMember(Long memberId) {
+        memberRepository.deleteMemberByMemberId(memberId);
+    }
+
     //회원 전체 조회
     public List<Member> findAll() {
         return memberRepository.findAll();

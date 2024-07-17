@@ -32,7 +32,7 @@ public class Place {
         this.category = form.getCategory();
     }
 
-    public void UpdatePlaceFromPlaceForm(PlaceForm form) {
+    public void UpdateFromPlaceForm(PlaceForm form) {
         this.placeName = form.getPlaceName();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
         this.description = form.getDescription();

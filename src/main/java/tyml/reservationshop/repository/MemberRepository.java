@@ -45,6 +45,13 @@ public class MemberRepository {
         } catch (NoResultException e) {
             return null;
         }
+    }
+
+    public void deleteMemberByMemberId(Long memberId) {
+
+        em.createQuery("DELETE FROM Member p WHERE p.id = :memberId")
+                .setParameter("memberId", memberId)
+                .executeUpdate();
 
     }
 

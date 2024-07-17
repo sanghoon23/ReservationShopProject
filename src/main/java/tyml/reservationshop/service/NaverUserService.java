@@ -1,7 +1,6 @@
 package tyml.reservationshop.service;
 
 import io.netty.handler.codec.http.HttpHeaderValues;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,18 +8,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 import reactor.core.publisher.Mono;
-import tyml.reservationshop.domain.dto.KakaoTokenResponseDto;
-import tyml.reservationshop.domain.dto.KakaoUserInfoResponseDto;
 import tyml.reservationshop.domain.dto.NaverTokenResponseDto;
 import tyml.reservationshop.domain.dto.NaverUserInfoResponseDto;
+import tyml.reservationshop.domain.dto.TokenResponseDto;
 
 @Slf4j
 //@RequiredArgsConstructor
 @Service
-public class NaverLoginService {
+public class NaverUserService {
 
     @Value("${naver.client_id}")
     private String clientId;
@@ -37,7 +33,7 @@ public class NaverLoginService {
 
 
     @Autowired
-    public NaverLoginService(@Value("${naver.client_id}") String clientId) {
+    public NaverUserService(@Value("${naver.client_id}") String clientId) {
         this.clientId = clientId;
         NAVER_TOKEN_URL_HOST ="https://nid.naver.com";
         NAVER_USER_URL_HOST = "https://openapi.naver.com";
@@ -46,7 +42,7 @@ public class NaverLoginService {
 
     public String getAccessTokenFromNaver(String code, String state) {
 
-        NaverTokenResponseDto naverTokenResponseDto = WebClient.create(NAVER_TOKEN_URL_HOST).post()
+        TokenResponseDto naverTokenResponseDto = WebClient.create(NAVER_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
                         .scheme("https")
                         .path("/oauth2.0/token")
@@ -61,7 +57,7 @@ public class NaverLoginService {
                 //TODO : Custom Exception
                 .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
                 .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
-                .bodyToMono(NaverTokenResponseDto.class)
+                .bodyToMono(TokenResponseDto.class)
                 .block();
 
 

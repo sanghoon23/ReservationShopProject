@@ -11,7 +11,7 @@ import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.MemberForm;
 import tyml.reservationshop.domain.dto.NaverUserInfoResponseDto;
 import tyml.reservationshop.service.MemberService;
-import tyml.reservationshop.service.NaverLoginService;
+import tyml.reservationshop.service.NaverUserService;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -22,17 +22,17 @@ import java.util.Optional;
 public class NaverLoginController {
 
     private final MemberService memberService;
-    private final NaverLoginService naverLoginService;
+    private final NaverUserService naverUserService;
 
 
     @GetMapping("/oauth2/callback/naver")
     public void naverLogin(@RequestParam("code") String code,
                            @RequestParam("state") String state,
                            HttpSession session, HttpServletResponse response) throws IOException {
-        String accessToken = naverLoginService.getAccessTokenFromNaver(code, state);
+        String accessToken = naverUserService.getAccessTokenFromNaver(code, state);
 
 
-        NaverUserInfoResponseDto userInfo = naverLoginService.getUserInfo(accessToken);
+        NaverUserInfoResponseDto userInfo = naverUserService.getUserInfo(accessToken);
 
         String userEmail = userInfo.getNaverUserInfoResponse().getEmail();
 
@@ -64,7 +64,7 @@ public class NaverLoginController {
 
         String accessToken = (String) session.getAttribute("accessToken");
         if (accessToken != null) {
-            naverLoginService.logoutFromNaver(accessToken);
+            naverUserService.logoutFromNaver(accessToken);
         }
 
         // 세션 무효화
