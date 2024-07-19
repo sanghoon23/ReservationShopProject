@@ -9,14 +9,14 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import tyml.reservationshop.domain.dto.NaverTokenResponseDto;
 import tyml.reservationshop.domain.dto.NaverUserInfoResponseDto;
 import tyml.reservationshop.domain.dto.TokenResponseDto;
+import tyml.reservationshop.service.base.userService;
 
 @Slf4j
 //@RequiredArgsConstructor
 @Service
-public class NaverUserService {
+public class NaverUserService implements userService {
 
     @Value("${naver.client_id}")
     private String clientId;
@@ -40,7 +40,7 @@ public class NaverUserService {
         NAVER_LOGOUT_URL_HOST = "https://nid.naver.com";
     }
 
-    public String getAccessTokenFromNaver(String code, String state) {
+    public String getAccessToken(String code, String state) {
 
         TokenResponseDto naverTokenResponseDto = WebClient.create(NAVER_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
@@ -96,7 +96,7 @@ public class NaverUserService {
         return userInfo;
     }
 
-    public void logoutFromNaver(String accessToken) {
+    public void logout(String accessToken) {
 
         WebClient.create(NAVER_LOGOUT_URL_HOST)
                 .post()

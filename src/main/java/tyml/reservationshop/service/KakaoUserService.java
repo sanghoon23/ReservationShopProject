@@ -9,15 +9,15 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
-import tyml.reservationshop.domain.dto.KakaoTokenResponseDto;
 import tyml.reservationshop.domain.dto.KakaoUserInfoResponseDto;
 import org.springframework.http.HttpStatusCode;
 import tyml.reservationshop.domain.dto.TokenResponseDto;
+import tyml.reservationshop.service.base.userService;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class KakaoUserService {
+public class KakaoUserService implements userService {
 
 
     private String clientId;
@@ -36,7 +36,7 @@ public class KakaoUserService {
         LOGOUT_REDIRECT_URI = logoutRedirectUri;
     }
 
-    public String getAccessTokenFromKakao(String code) {
+    public String getAccessToken(String code, String state) {
 
         TokenResponseDto kakaoTokenResponseDto = WebClient.create(KAUTH_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
@@ -89,7 +89,29 @@ public class KakaoUserService {
         return userInfo;
     }
 
-    public void logoutFromKakao(String accessToken) {
+    public void logout(String accessToken) {
+
+        WebClient.create(KAUTH_LOGOUT_URL_HOST)
+                .post()
+                .uri(uriBuilder -> uriBuilder
+                        .scheme("https")
+                        .path("/v1/user/unlink")
+                        .queryParam("client_id", clientId)
+                        .queryParam("logout_redirect_uri", LOGOUT_REDIRECT_URI)
+                        .build(true))
+                .header(HttpHeaders.AUTHORIZATION, "Bearer " + accessToken)
+                .header(HttpHeaders.CONTENT_TYPE, HttpHeaderValues.APPLICATION_X_WWW_FORM_URLENCODED.toString())
+                .retrieve()
+                .onStatus(HttpStatusCode::is4xxClientError, clientResponse -> Mono.error(new RuntimeException("Invalid Parameter")))
+                .onStatus(HttpStatusCode::is5xxServerError, clientResponse -> Mono.error(new RuntimeException("Internal Server Error")))
+                .bodyToMono(Void.class)
+                .block();
+
+        log.info("[Kakao Service] User unlink successfully.");
+
+    }
+
+    private void logoutFromKakao(String accessToken) {
         WebClient.create(KAUTH_LOGOUT_URL_HOST)
                 .post()
                 .uri(uriBuilder -> uriBuilder
@@ -109,7 +131,7 @@ public class KakaoUserService {
         log.info("[Kakao Service] User logged out successfully.");
     }
 
-    public void unlinkFromKakao(String accessToken) {
+    private void unlinkFromKakao(String accessToken) {
         WebClient.create(KAUTH_LOGOUT_URL_HOST)
                 .post()
                 .uri(uriBuilder -> uriBuilder

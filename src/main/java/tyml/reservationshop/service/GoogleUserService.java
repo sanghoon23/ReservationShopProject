@@ -11,13 +11,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import tyml.reservationshop.domain.dto.*;
+import tyml.reservationshop.service.base.userService;
 
 import java.util.UUID;
 
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class GoogleUserService {
+public class GoogleUserService implements userService {
 
     private String clientId;
     private String redirectUri;
@@ -39,10 +40,10 @@ public class GoogleUserService {
         GOOGLE_LOGOUT_URL_HOST = "https://oauth2.googleapis.com";
     }
 
-    public String getAccessTokenFromGoogle(String code) {
+    public String getAccessToken(String code, String state) {
 
         //state 랜덤값 생성
-        String state = UUID.randomUUID().toString();
+        state = UUID.randomUUID().toString();
 
         TokenResponseDto googleTokenResponseDto = WebClient.create(GOOGLE_TOKEN_URL_HOST).post()
                 .uri(uriBuilder -> uriBuilder
@@ -94,7 +95,7 @@ public class GoogleUserService {
         return userInfo;
     }
 
-    public void logoutFromGoogle(String accessToken) {
+    public void logout(String accessToken) {
 
         //Revoke
         WebClient.create(GOOGLE_LOGOUT_URL_HOST)
