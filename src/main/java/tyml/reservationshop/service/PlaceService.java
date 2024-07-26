@@ -8,6 +8,7 @@ import tyml.reservationshop.domain.Place;
 import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.PlaceRepository;
 
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -56,6 +57,13 @@ public class PlaceService {
         return placeRepository.findByCategory(category);
     }
 
+    public List<Place> findByNameContaining(String searchName) {
+        // 검색어 빈 문자열인 경우
+        if(searchName.trim().isEmpty()){
+            return Collections.emptyList();
+        }
+        return placeRepository.findByNameContaining(searchName);
+    }
 
 
 }

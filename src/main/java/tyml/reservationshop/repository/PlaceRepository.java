@@ -2,6 +2,7 @@ package tyml.reservationshop.repository;
 
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.Place;
@@ -51,6 +52,13 @@ public class PlaceRepository {
                 .setParameter("placeId", placeId)
                 .executeUpdate();
 
+    }
+
+    public List<Place> findByNameContaining(String searchQuery) {
+        String query = "SELECT p FROM Place p WHERE p.placeName LIKE CONCAT('%', :searchQuery, '%')";
+        return em.createQuery(query, Place.class)
+                .setParameter("searchQuery", searchQuery)
+                .getResultList();
     }
 
 }
