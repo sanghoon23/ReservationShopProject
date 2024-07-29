@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import tyml.reservationshop.domain.dto.PlaceForm;
 
+import java.util.List;
+
 @Getter
 @Entity
 public class Place {
@@ -22,6 +24,9 @@ public class Place {
     private String uploadImageFileName;
 
     private String category;
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<Comment> commnets;
 
     protected  Place() {}
     public Place(PlaceForm form) {

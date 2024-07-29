@@ -77,21 +77,28 @@
             height: 400px;
         }
 
+        .comment {
+            border-bottom: 1px solid #ccc;
+            padding: 10px 0;
+        }
+
     </style>
 
     <script>
+
+        // URL에서 파라미터를 가져오는 함수
+        function getUrlDetailNumber() {
+            var regex = /detail\/(\d+)/;
+            var match = regex.exec(window.location.href);
+            return match ? match[1] : '';
+        }
+
+        //ajax 로 데이터 가져오기
         $(document).ready(function() {
             var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
 
-            // URL에서 파라미터를 가져오는 함수
-            function getUrlDetailNumber() {
-                var regex = /detail\/(\d+)/;
-                var match = regex.exec(window.location.href);
-                return match ? match[1] : '';
-            }
-
             $.ajax({
-                url: '/api/place/detail/' + placeId,
+                url: '/api/place/map/detail/' + placeId,
                 method: 'GET',
                 dataType: 'json', // 데이터 형식은 JSON으로 설정
                 success: function (data) {
@@ -108,6 +115,58 @@
                 }
             });
         });
+
+        //comment 로드하기
+        loadComments();
+        function loadComments(){
+
+            $.ajax({
+                url: '/api/place/commentList/' + placeId,
+                method: 'GET',
+                dataType: 'json',
+                success: function (data){
+                    data.forEach(function(comment) {
+                        addCommentToDOM(comment);
+                    });
+                },
+                error: function (error) {
+                    console.error("댓글 로드 실패:", error);
+                }
+
+            });
+
+        }
+
+        function addCommentToDOM(comment) {
+            var commentDiv = $('<div class="comment"></div>');
+            commentDiv.text(comment.content);
+            $('#comments').prepend(commentDiv);
+        }
+
+        // 댓글 추가 이벤트 핸들러
+        $('#commentForm').submit(function(event) {
+            event.preventDefault(); // 폼 제출 기본 동작 방지
+            var content = $('#commentContent').val();
+            var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
+
+            $.ajax({
+                url: '/api/places/commentList/' + placeId,
+                method: 'POST',
+                contentType: 'application/x-www-form-urlencoded',
+                data: {
+                    content: content,
+                },
+                success: function (data) {
+                    addCommentToDOM(data);
+                    $('#commentContent').val('');  // 입력 필드 비우기
+                },
+                error: function (error) {
+                    alert('댓글 추가 실패');
+                    console.error("댓글 추가 실패:", error);
+                }
+            });
+        });
+
 
     </script>
 
@@ -131,6 +190,17 @@
     <div id="map"></div>
 
 
-</div>
+    <!-- 댓글 입력 폼 -->
+        <div class="comment-form">
+            <form id="commentForm">
+                <textarea id="commentContent" name="content" rows="4" cols="50" placeholder="Enter your comment here"></textarea>
+                <br>
+                <input type="hidden" id="userId" name="userId" value="1"> <!-- 실제 구현에서는 로그인된 사용자 ID를 사용해야 함 -->
+                <button type="submit">Submit</button>
+            </form>
+        </div>
+        <div id="comments"></div>
+    </div>
+
 </body>
 </html>
