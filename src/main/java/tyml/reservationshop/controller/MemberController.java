@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -32,6 +34,7 @@ import java.util.UUID;
 public class MemberController {
 
     private final MemberService memberService;
+    private final PasswordEncoder passwordEncoder;
 
     /*
         Kakao
@@ -152,7 +155,6 @@ public class MemberController {
                 , (form == null)? new MemberForm() : form
         );
 
-        EmailSenderDto emailDto = (EmailSenderDto)session.getAttribute("emailSenderDto");
         model.addAttribute(
                 "emailSenderDto"
                 , new EmailSenderDto()
@@ -162,14 +164,32 @@ public class MemberController {
     }
 
     @PostMapping("/members/createMemberForm")
-    public String createMemberForm(@Valid MemberForm form, BindingResult bindingResult) {
+    public String createMemberForm(@Valid MemberForm memberForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "members/createMemberForm";
         }
 
-        Member member = new Member(form);
-        memberService.join(member);
+        if (!memberForm.getPw().equals(memberForm.getPwCheck())) {
+            bindingResult.rejectValue("pw", "passwardInCorrect", "2개의 패스워드가 일치하지 않습니다.");
+            return "members/createMemberForm";
+        }
+
+        memberForm.setPw(passwordEncoder.encode(memberForm.getPw()));
+        Member member = new Member(memberForm);
+
+        try {
+            memberService.join(member);
+        } catch (DataIntegrityViolationException e) { //@Email 중복 Exception
+            e.printStackTrace();
+            bindingResult.rejectValue("email", "signupFailed", "이미 등록된 사용자입니다.");
+            return "members/createMemberForm";
+        } catch (Exception e) {
+            e.printStackTrace();
+            bindingResult.reject("signupFailed", e.getMessage());
+            return "members/createMemberForm";
+        }
+
         return "redirect:/";
     }
 

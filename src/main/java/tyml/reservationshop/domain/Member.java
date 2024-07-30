@@ -1,7 +1,9 @@
 package tyml.reservationshop.domain;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
+import lombok.Setter;
 import tyml.reservationshop.domain.dto.MemberForm;
 
 import java.util.ArrayList;
@@ -18,12 +20,14 @@ public class Member {
 
     private String name;
 
-    private String createId;
-
-    private String phoneNumber;
+    @Setter
+    private String pw;
 
     @Column(unique = true)
     private String email;
+
+    private String phoneNumber;
+
 
 
     @Embedded
@@ -37,7 +41,7 @@ public class Member {
     public Member(MemberForm form)
     {
         this.name = form.getName();
-        this.createId = form.getCreateId();
+        this.pw = form.getPw();
         this.phoneNumber = form.getPhoneNumber();
         this.email = form.getEmail();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
@@ -46,7 +50,7 @@ public class Member {
     public void UpdateFromMemberForm(MemberForm form)
     {
         this.name = form.getName();
-        this.createId = form.getCreateId();
+        this.pw = form.getPw();
         this.phoneNumber = form.getPhoneNumber();
         this.email = form.getEmail();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());

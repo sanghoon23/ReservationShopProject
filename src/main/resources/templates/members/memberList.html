@@ -43,9 +43,8 @@
                 <thead>
                 <tr>
                     <th>이름</th>
-                    <th>아이디</th>
-                    <th>휴대폰</th>
                     <th>이메일</th>
+                    <th>휴대폰</th>
                     <th>우편번호</th>
                     <th>주소</th>
                     <th>상세주소</th>
@@ -54,9 +53,8 @@
                 <tbody>
                 <tr th:each="member : ${members}">
                     <td th:text="${member.name}"></td>
-                    <td th:text="${member.createId}"></td>
-                    <td th:text="${member.phoneNumber}"></td>
                     <td th:text="${member.email}"></td>
+                    <td th:text="${member.phoneNumber}"></td>
                     <td th:text="${member.getAddress().getPostcodes()}"></td>
                     <td th:text="${member.getAddress().getAddress()}"></td>
                     <td th:text="${member.getAddress().getDetailAddress()}"></td>

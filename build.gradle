@@ -24,6 +24,7 @@ repositories {
 }
 
 dependencies {
+
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
@@ -45,6 +46,13 @@ dependencies {
     //Webflux
     implementation 'org.springframework.boot:spring-boot-starter-webflux'
 
+    //session
+    implementation 'org.springframework.session:spring-session-core'
+
+
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
 }
 
 tasks.named('test') {

@@ -1,5 +1,6 @@
 package tyml.reservationshop.domain.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
@@ -13,21 +14,19 @@ import java.util.Random;
 @Setter
 public class MemberForm {
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "이름을 입력하세요.")
     private String name;
 
-    @NotEmpty(message = "")
-    private String createId;
-
-    @NotEmpty(message = "")
+    @NotEmpty(message = "비밀번호를 입력하세요.")
     private String pw;
 
     private String pwCheck;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "휴대전화가 올바르지 않습니다.")
     private String phoneNumber;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "이메일을 입력하세요.")
+    @Email
     private String email;
 
     @NotEmpty(message = "")
@@ -36,14 +35,12 @@ public class MemberForm {
     @NotEmpty(message = "")
     private String address;
 
-    @NotEmpty(message = "")
     private String detailAddress;
 
     public MemberForm() {}
     public MemberForm(Member member) {
 
         this.name = member.getName();
-        this.createId = member.getCreateId();
         this.phoneNumber = member.getPhoneNumber();
         this.email = member.getEmail();
         this.postcodes = member.getAddress().getPostcodes();

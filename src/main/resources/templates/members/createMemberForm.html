@@ -30,8 +30,12 @@
             min-height: 100vh;
         }
 
-        .fieldError {
-            border-color: red;
+        .error {
+            border: 1px solid red;
+        }
+        .error-message {
+            color: red;
+            font-size: small;
         }
 
     </style>
@@ -54,67 +58,58 @@
                       method="post">
 
                     <div class="row g-3 pb-5">
+
                         <div class="col-12">
-                            <label th:for="name">이름</label>
-                            <input type="text" th:field="*{name}" class="form-control"
-                                   id="name" placeholder="이름"
-                                   th:class="${#fields.hasErrors('name')}? 'form-control fieldError' : 'form-control'">
-<!--                            <p th:if="${#fields.hasErrors('name')}"  th:errors="*{name}">Incorrect date</p>-->
+                            <label for="name">이름</label>
+                            <input type="text" id="name" th:field="*{name}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('name')}? 'error' : ''"/>
+                            <div th:if="${#fields.hasErrors('name')}" class="error-message" th:errors="*{name}">Incorrect date</div>
                         </div>
 
 
                         <div class="col-12">
-                            <label class="form-label">회원 아이디</label>
-                            <div class="input-group has-validation">
-                                <input type="text" th:field="*{createId}"
-                                       class="form-control" id="createId" placeholder="아이디">
+                            <label class="form-label">Email</label>
+                            <input type="email" id="email" th:field="*{email}" class="form-control" placeholder="example@test.com"
+                                   th:class="${#fields.hasErrors('email')}? 'form-control fieldError' : 'form-control'"
+                                   th:classappend="${#fields.hasErrors('email')}? 'error' : ''"/>
+
+                            <div th:if="${#fields.hasErrors('email')}" class="error-message" th:errors="*{email}">
+                                <p th:each="error : ${#fields.errors('email')}" th:text="${error}"></p>
+
                             </div>
-                        </div>
 
-                        <div class="col-12">
-                            <label class="form-label">비밀번호</label>
-                            <div class="input-group has-validation">
-                                <input type="text" th:field="*{pw}"
-                                       class="form-control" id="pw" placeholder="비밀번호"
-                                       th:class="${#fields.hasErrors('pw')}? 'form-control fieldError' : 'form-control'">
-<!--                                <p th:if="${#fields.hasErrors('pw')}"  th:errors="*{pw}">Incorrect date</p>-->
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">비밀번호 확인</label>
-                            <div class="input-group has-validation">
-                                <input type="text" th:field="*{pwCheck}"
-                                       class="form-control" id="pwCheck" placeholder="비밀번호 확인">
-                            </div>
-                        </div>
-
-                        <div class="col-12">
-                            <label class="form-label">휴대전화 <span class="text-body-secondary">(Optional)</span></label>
-                            <input type="number" th:field="*{phoneNumber}"
-                                   class="form-control" id="phoneNumber" placeholder="010-1111-1111"
-                                   th:class="${#fields.hasErrors('phoneNumber')}? 'form-control fieldError' : 'form-control'">
-<!--                            <p th:if="${#fields.hasErrors('phoneNumber')}"  th:errors="*{phoneNumber}">Incorrect date</p>-->
-                        </div>
-
-                        <div class="col-12">
-
-                            <label class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
-                                <input type="email" th:field="*{email}"
-                                       class="form-control" id="email" placeholder="example@test.com"
-                                       th:class="${#fields.hasErrors('email')}? 'form-control fieldError' : 'form-control'">
-    <!--                            <p th:if="${#fields.hasErrors('email')}"  th:errors="*{email}">Incorrect date</p>-->
 
                             <button type="button" class="btn btn-primary mt-3" onclick="sendAuthEmail()">이메일 인증</button>
-
                         </div>
 
                         <div class="col-12">
-                            <label class="form-label">이메일 인증 번호 확인 <span class="text-body-secondary"></span></label>
+                            <label class="form-label">이메일 인증 번호 확인</label>
                             <input type="text" class="form-control" id="authNumber" placeholder="123456">
 
                             <button type="button" class="w10 btn btn-primary btn-lg" onclick="checkAuth()">인증확인</button>
                         </div>
+
+                        <div class="col-12">
+                            <label for="pw">비밀번호</label>
+                            <input type="password" id="pw" th:field="*{pw}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('pw')}? 'error' : ''"/>
+                            <div th:if="${#fields.hasErrors('pw')}" class="error-message" th:errors="*{pw}">Password Error</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="pwCheck">비밀번호 확인</label>
+                            <input type="password" id="pwCheck" th:field="*{pwCheck}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('pwCheck')}? 'error' : ''"/>
+                            <div th:if="${#fields.hasErrors('pwCheck')}" class="error-message" th:errors="*{pwCheck}">Password Check Error</div>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="phoneNumber">휴대전화</label>
+                            <input type="text" id="phoneNumber" th:field="*{phoneNumber}" class="form-control"
+                                   th:classappend="${#fields.hasErrors('phoneNumber')}? 'error' : ''"/>
+                            <div th:if="${#fields.hasErrors('phoneNumber')}" class="error-message" th:errors="*{phoneNumber}">Incorrect date</div>
+                        </div>
+
 
                         <div class="col-12">
                             <label class="form-label">우편번호</label>
@@ -127,6 +122,7 @@
 
                             </div>
                         </div>
+
                         <div class="col-12">
                             <label class="form-label">주소 <span class="text-body-secondary"></span></label>
                             <div class="input-group has-validation">
