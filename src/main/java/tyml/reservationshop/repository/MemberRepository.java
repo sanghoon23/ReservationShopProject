@@ -12,6 +12,7 @@ import java.util.List;
 
 @Repository
 @RequiredArgsConstructor
+@Transactional
 public class MemberRepository {
 
     private final EntityManager em;

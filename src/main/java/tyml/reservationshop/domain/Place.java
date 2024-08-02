@@ -2,8 +2,10 @@ package tyml.reservationshop.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import tyml.reservationshop.domain.dto.PlaceForm;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -25,10 +27,13 @@ public class Place {
 
     private String category;
 
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
-    private List<Comment> commnets;
+    @OneToMany(mappedBy = "place")
+    @JsonIgnore
+    private List<Comment> comments = new ArrayList<>();
 
-    protected  Place() {}
+    public  Place() {
+        address = new Address();
+    }
     public Place(PlaceForm form) {
         this.placeName = form.getPlaceName();
         this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());

@@ -29,22 +29,22 @@ public class Member {
     private String phoneNumber;
 
 
-
     @Embedded
     private Address address;
-
 
     @OneToMany(mappedBy = "member")
     private List<Reserv> Reservs = new ArrayList<Reserv>();
 
-    protected Member() {}
+    public Member() {
+        address = new Address();
+    }
     public Member(MemberForm form)
     {
         this.name = form.getName();
         this.pw = form.getPw();
         this.phoneNumber = form.getPhoneNumber();
         this.email = form.getEmail();
-        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
+        this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
     }
 
     public void UpdateFromMemberForm(MemberForm form)
@@ -53,7 +53,7 @@ public class Member {
         this.pw = form.getPw();
         this.phoneNumber = form.getPhoneNumber();
         this.email = form.getEmail();
-        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
+        this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
     }
 
 }

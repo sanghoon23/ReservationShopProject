@@ -102,11 +102,7 @@
                 method: 'GET',
                 dataType: 'json', // 데이터 형식은 JSON으로 설정
                 success: function (data) {
-                    $('#placeName').text(data.placeName);
-                    $('#placeImage').attr('src', '/upload/' + data.uploadImageFileName);
                     var address = data.address.address + ', ' + data.address.detailAddress;
-
-                    $('#address').text(address);
 
                     searchAddress(address); // 주소로 지도 검색
                 },
@@ -119,7 +115,7 @@
         //comment 로드하기
         loadComments();
         function loadComments(){
-
+            var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
             $.ajax({
                 url: '/api/place/commentList/' + placeId,
                 method: 'GET',

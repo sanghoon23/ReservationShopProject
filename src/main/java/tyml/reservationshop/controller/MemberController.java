@@ -15,16 +15,13 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.util.UriComponents;
-import org.springframework.web.util.UriComponentsBuilder;
 import tyml.reservationshop.domain.dto.EmailSenderDto;
 import tyml.reservationshop.domain.dto.LoginForm;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.MemberForm;
-import tyml.reservationshop.domain.dto.PlaceForm;
-import tyml.reservationshop.service.MemberService;
+import tyml.reservationshop.service.user.MemberService;
 
-import java.net.URLEncoder;
+import java.util.List;
 import java.util.UUID;
 
 @Slf4j
@@ -37,113 +34,16 @@ public class MemberController {
     private final PasswordEncoder passwordEncoder;
 
     /*
-        Kakao
-    */
-    @Value("${kakao.client_id}")
-    private String kakao_client_id;
-
-    @Value("${kakao.redirect_uri}")
-    private String kakao_redirect_uri;
-    /*
-    *****************************************************
-     */
-
-
-    /*
-        NAVER
-     */
-    @Value("${naver.client_id}")
-    private String naver_client_id;
-
-    @Value("${naver.redirect_uri}")
-    private String naver_redirect_uri;
-
-    @Value("${naver.client_secret}")
-    private String naver_client_secret;
-
-    /*
-    *****************************************************
-     */
-
-    /*
-        GOOGLE
-     */
-
-    @Value("${google.client_id}")
-    private String google_client_id;
-
-    @Value("${google.client_secret}")
-    private String google_client_secret;
-
-    @Value("${google.redirect_uri}")
-    private String google_redirect_uri;
-
-    @Value("${google.scope}")
-    private String google_scope;
-
-
-    /*
-     *****************************************************
+**********************************************************************************************************
      */
 
     @GetMapping("/members/loginMemberPage")
     public String loginMemberPage(Model model, HttpSession session) {
 
-        //@NAVER INFO INSERT
-        {
-            String state = UUID.randomUUID().toString();
-            session.setAttribute("state", state);
-
-            String naverLocation = "https://nid.naver.com/oauth2.0/authorize?"
-                    + "response_type=code"
-                    + "&client_id=" + naver_client_id
-                    + "&state=" + state
-                    + "&redirect_uri=" + naver_redirect_uri;
-            model.addAttribute("naverLocation", naverLocation);
-        }
-
-        //@KAKAO INFO INSERT
-        {
-            String kakaoLocation = "https://kauth.kakao.com/oauth/authorize?"
-                    + "response_type=code"
-                    + "&client_id=" + kakao_client_id
-                    + "&redirect_uri=" + kakao_redirect_uri;
-            model.addAttribute("kakaoLocation", kakaoLocation);
-        }
-
-        //@GOOGLE INFO INSERT
-        {
-            String googleLocation = "https://accounts.google.com/o/oauth2/v2/auth?"
-                    + "client_id=" + google_client_id
-                    + "&redirect_uri=" + google_redirect_uri
-                    + "&response_type=code"
-                    + "&scope=" + google_scope;
-            model.addAttribute("googleLocation", googleLocation);
-        }
-
-
         model.addAttribute("loginForm", new LoginForm());
-
         return "/members/loginMemberPage";
     }
 
-    @PostMapping("/members/login")
-    public String login(@Valid LoginForm form, BindingResult bindingResult) {
-
-        if (bindingResult.hasErrors()) {
-            return "members/loginMemberPage";
-        }
-
-        return "redirect:/";
-    }
-
-    @GetMapping("/members/createMemberPage")
-    public String memberMemberPage(Model model) {
-
-        String kakaoLocation = "https://kauth.kakao.com/oauth/authorize?" + "response_type=code&" + "client_id="+ kakao_client_id +"&redirect_uri="+ kakao_redirect_uri;
-        model.addAttribute("kakaoLocation", kakaoLocation);
-        return "members/createMemberPage";
-    }
 
     @GetMapping("/members/createMemberForm")
     public String createMemberForm(Model model, HttpSession session) {
@@ -160,19 +60,19 @@ public class MemberController {
                 , new EmailSenderDto()
         );
 
-        return "members/createMemberForm";
+        return "/members/createMemberForm";
     }
 
     @PostMapping("/members/createMemberForm")
     public String createMemberForm(@Valid MemberForm memberForm, BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
-            return "members/createMemberForm";
+            return "/members/createMemberForm";
         }
 
         if (!memberForm.getPw().equals(memberForm.getPwCheck())) {
             bindingResult.rejectValue("pw", "passwardInCorrect", "2개의 패스워드가 일치하지 않습니다.");
-            return "members/createMemberForm";
+            return "/members/createMemberForm";
         }
 
         memberForm.setPw(passwordEncoder.encode(memberForm.getPw()));
@@ -183,11 +83,11 @@ public class MemberController {
         } catch (DataIntegrityViolationException e) { //@Email 중복 Exception
             e.printStackTrace();
             bindingResult.rejectValue("email", "signupFailed", "이미 등록된 사용자입니다.");
-            return "members/createMemberForm";
+            return "/members/createMemberForm";
         } catch (Exception e) {
             e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
-            return "members/createMemberForm";
+            return "/members/createMemberForm";
         }
 
         return "redirect:/";
@@ -195,8 +95,9 @@ public class MemberController {
 
     @GetMapping("/members/memberList")
     public String memberList(Model model) {
-        model.addAttribute("members", memberService.findAll());
-        return "members/memberList";
+        List<Member> memberList = memberService.findAll();
+        model.addAttribute("members", memberList);
+        return "/members/memberList";
     }
 
     @GetMapping("/members/modifyMemberForm/{memberId}")

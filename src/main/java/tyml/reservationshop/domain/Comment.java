@@ -2,38 +2,37 @@ package tyml.reservationshop.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.scheduling.quartz.LocalDataSourceJobStore;
 
 import java.time.LocalDateTime;
 
-@Entity
 @Getter
+@Entity
+@Table(name = "COMMENTS")
 public class Comment {
 
-    @Id
-    @GeneratedValue
+    @Id @GeneratedValue
+    @Column(name = "comment_id")
     private Long id;
 
-
-    @Column(name = "user_id", nullable = false)
     private Long userId;
 
     @Lob
     private String content;
 
-    @Column(name = "create_at", updatable = false)
     private LocalDateTime createdAt;
 
-    @Column(name = "update_at")
     private LocalDateTime updateAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
+    @JsonIgnore
     private Place place;
 
 
 
-    public Comment(){}
+    protected Comment(){}
 
     public Comment(String content, Long userId, Place place) {
         this.content = content;

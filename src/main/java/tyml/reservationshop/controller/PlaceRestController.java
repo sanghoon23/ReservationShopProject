@@ -21,6 +21,7 @@ public class PlaceRestController {
     @GetMapping("/place/map/detail/{placeId}")
     public ResponseEntity<Place> getPlaceDetail(@PathVariable("placeId") Long placeId) {
         Place place = placeService.findOne(placeId);
+
         if (place != null) {
             return ResponseEntity.ok(place);
         } else {
@@ -38,7 +39,7 @@ public class PlaceRestController {
     @PostMapping("/place/commentList/{placeId}")
     public ResponseEntity<Comment> addCommentToPlace(@PathVariable Long placeId,
                                                      @RequestParam String content) {
-        //현재 로그인된 userId 구하기
+        //현재 로그인된 Member 의 userId 구하기
         Long userId = 0L;
 
         Comment comment = placeService.addCommentToPlace(content, userId, placeId);

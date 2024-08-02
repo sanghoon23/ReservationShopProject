@@ -36,7 +36,7 @@ public class PlaceForm {
     public PlaceForm(Place place) {
         this.placeName = place.getPlaceName();
         this.postcodes = place.getAddress().getPostcodes();
-        this.address = place.getAddress().getAddress();
+        this.address = place.getAddress().getMainAddress();
         this.detailAddress = place.getAddress().getDetailAddress();
         this.description = place.getDescription();
         this.uploadImageFileName = place.getUploadImageFileName();

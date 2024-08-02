@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 
 <!-- header -->
@@ -13,13 +14,14 @@
             <div class="collapse navbar-collapse" id="navbarCollapse">
                 <ul class="navbar-nav me-auto mb-2 mb-md-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="/members/loginMemberPage">로그인</a>
-                    </li>
+                        <a class="nav-link" sec:authorize="isAnonymous()"
+                           th:href="@{/members/loginMemberPage}">로그인</a>
+                        <a class="nav-link" sec:authorize="isAuthenticated()"
+                           href="/members/logout">로그아웃</a>
+
                     <li class="nav-item">
-                        <a class="nav-link" href="/members/createMemberForm">회원가입</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/oauth2/logout">로그아웃</a>
+                        <a class="nav-link" sec:authorize="isAnonymous()"
+                           href="/members/createMemberForm">회원가입</a>
                     </li>
 <!--                    <li class="nav-item">-->
 <!--                        <a class="nav-link" href="/oauth2/kakaoUnlink">카카오링크끊기</a>-->

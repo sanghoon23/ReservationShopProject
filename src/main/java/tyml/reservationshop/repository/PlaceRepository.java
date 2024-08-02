@@ -20,7 +20,10 @@ public class PlaceRepository {
     }
 
     public Place findOne(Long placeId) {
-        return em.find(Place.class, placeId);
+        //return em.find(Place.class, placeId);
+        return em.createQuery("select p from Place p where p.id = :placeId", Place.class)
+                .setParameter("placeId", placeId)
+                .getSingleResult();
     }
 
     public List<Place> findAll() {

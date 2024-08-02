@@ -1,17 +1,13 @@
-package tyml.reservationshop.service;
+package tyml.reservationshop.service.user;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Member;
-import tyml.reservationshop.domain.Place;
 import tyml.reservationshop.domain.dto.MemberForm;
-import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.MemberRepository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional

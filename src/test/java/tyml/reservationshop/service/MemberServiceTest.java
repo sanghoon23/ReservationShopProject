@@ -9,6 +9,7 @@ import tyml.reservationshop.domain.Address;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.MemberForm;
 import tyml.reservationshop.repository.MemberRepository;
+import tyml.reservationshop.service.user.MemberService;
 
 @SpringBootTest
 @Transactional

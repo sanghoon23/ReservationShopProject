@@ -22,20 +22,18 @@ public class MemberForm {
 
     private String pwCheck;
 
-    @NotEmpty(message = "휴대전화가 올바르지 않습니다.")
+    @NotEmpty(message = "휴대전화를 입력하세요.")
     private String phoneNumber;
 
     @NotEmpty(message = "이메일을 입력하세요.")
     @Email
     private String email;
 
-    @NotEmpty(message = "")
-    private String postcodes;
+    private String postcodes = " ";
 
-    @NotEmpty(message = "")
-    private String address;
+    private String mainAddress = " ";
 
-    private String detailAddress;
+    private String detailAddress = " ";
 
     public MemberForm() {}
     public MemberForm(Member member) {
@@ -44,7 +42,7 @@ public class MemberForm {
         this.phoneNumber = member.getPhoneNumber();
         this.email = member.getEmail();
         this.postcodes = member.getAddress().getPostcodes();
-        this.address = member.getAddress().getAddress();
+        this.mainAddress = member.getAddress().getMainAddress();
         this.detailAddress = member.getAddress().getDetailAddress();
 
     }
