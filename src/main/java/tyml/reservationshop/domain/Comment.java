@@ -27,7 +27,6 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
-    @JsonIgnore
     private Place place;
 
 

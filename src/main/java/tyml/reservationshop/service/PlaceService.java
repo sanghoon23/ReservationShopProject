@@ -19,7 +19,6 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
-    private final CommentRepository commentRepository;
 
 
     @Transactional
@@ -38,19 +37,6 @@ public class PlaceService {
     @Transactional
     public void deletePlace(Long placeId) {
         placeRepository.deletePlaceByPlaceId(placeId);
-    }
-
-    @Transactional
-    public Comment addCommentToPlace(String content, Long userId, Long placeId) {
-        Place place = placeRepository.findOne(placeId);
-        if (place == null) {
-            throw new RuntimeException("Place not found with id: " + placeId);
-        }
-
-
-        Comment comment = new Comment(content, userId, place);
-        commentRepository.save(comment);
-        return comment;
     }
 
 
@@ -85,15 +71,6 @@ public class PlaceService {
             return Collections.emptyList();
         }
         return placeRepository.findByNameContaining(searchName);
-    }
-
-    /*
-    @Comment
-************************************************************************************************************************************
-     */
-
-    public List<Comment> findCommentListByPlaceId(Long placeId) {
-        return commentRepository.findCommentByPlaceId(placeId);
     }
 
 }

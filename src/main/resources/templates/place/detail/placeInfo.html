@@ -93,76 +93,80 @@
             return match ? match[1] : '';
         }
 
-        //ajax 로 데이터 가져오기
-        $(document).ready(function() {
-            var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
-
-            $.ajax({
-                url: '/api/place/map/detail/' + placeId,
-                method: 'GET',
-                dataType: 'json', // 데이터 형식은 JSON으로 설정
-                success: function (data) {
-                    var address = data.address.address + ', ' + data.address.detailAddress;
-
-                    searchAddress(address); // 주소로 지도 검색
-                },
-                error: function (error) {
-                    console.error("데이터 로드 실패:", error);
-                }
-            });
-        });
-
-        //comment 로드하기
-        loadComments();
-        function loadComments(){
-            var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
-            $.ajax({
-                url: '/api/place/commentList/' + placeId,
-                method: 'GET',
-                dataType: 'json',
-                success: function (data){
-                    data.forEach(function(comment) {
-                        addCommentToDOM(comment);
-                    });
-                },
-                error: function (error) {
-                    console.error("댓글 로드 실패:", error);
-                }
-
-            });
-
-        }
-
         function addCommentToDOM(comment) {
             var commentDiv = $('<div class="comment"></div>');
             commentDiv.text(comment.content);
             $('#comments').prepend(commentDiv);
         }
 
-        // 댓글 추가 이벤트 핸들러
-        $('#commentForm').submit(function(event) {
-            event.preventDefault(); // 폼 제출 기본 동작 방지
-            var content = $('#commentContent').val();
-            var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
+        //ajax 로 데이터 가져오기
+        $(document).ready(function() {
+            function loadMap() {
+                var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
 
-            $.ajax({
-                url: '/api/places/commentList/' + placeId,
-                method: 'POST',
-                contentType: 'application/x-www-form-urlencoded',
-                data: {
-                    content: content,
-                },
-                success: function (data) {
-                    addCommentToDOM(data);
-                    $('#commentContent').val('');  // 입력 필드 비우기
-                },
-                error: function (error) {
-                    alert('댓글 추가 실패');
-                    console.error("댓글 추가 실패:", error);
-                }
+                $.ajax({
+                    url: '/api/place/map/detail/' + placeId,
+                    method: 'GET',
+                    dataType: 'json', // 데이터 형식은 JSON으로 설정
+                    success: function (data) {
+                        var address = data.mainAddress + ', ' + data.detailAddress;
+                        searchAddress(address); // 주소로 지도 검색
+                    },
+                    error: function (error) {
+                        console.error("데이터 로드 실패:", error);
+                    }
+                });
+            }
+
+            function loadComments(){
+                var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
+                $.ajax({
+                    url: '/api/place/commentList/' + placeId,
+                    method: 'GET',
+                    dataType: 'json',
+                    success: function (data){
+                        data.forEach(function(comment) {
+                            addCommentToDOM(comment);
+                        });
+                        addCommentToDOM(data);
+                    },
+                    error: function (error) {
+                        console.error("댓글 로드 실패:", error);
+                    }
+                });
+            }
+
+            //comment 로드하기
+            loadMap();
+            loadComments();
+
+            // 댓글 추가 이벤트 핸들러
+            $('#commentForm').off('submit').on('submit', function(event) {
+                event.preventDefault(); // 기본 폼 제출 방지
+
+                var content = $('#commentContent').val();
+                var placeId = getUrlDetailNumber(); // URL에서 placeId 파라미터 가져오기
+
+                $.ajax({
+                    url: '/api/place/commentList/' + placeId,
+                    method: 'POST',
+                    data: {
+                        content: content,
+                    },
+                    success: function (data) {
+                        console.log("댓글 추가 성공:", data.content);
+                        addCommentToDOM(data.content);
+                        $('#commentContent').val('');  // 입력 필드 비우기
+                        loadMap();
+                    },
+                    error: function (error) {
+                        alert('댓글 추가 실패');
+                        console.error("댓글 추가 실패:", error);
+                    }
+                });
             });
-        });
 
+        });
 
     </script>
 
@@ -179,7 +183,7 @@
 
     <div class="info-section">
         <h3>기본 정보</h3>
-        <p id="address" th:text="${place.getAddress().getAddress()} + ', ' + ${place.getAddress().getDetailAddress()}">주소</p>
+        <p id="address" th:text="${place.getAddress().getMainAddress()} + ', ' + ${place.getAddress().getDetailAddress()}">주소</p>
 
     </div>
 

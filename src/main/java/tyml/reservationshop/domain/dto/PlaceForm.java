@@ -17,7 +17,7 @@ public class PlaceForm {
     private String postcodes;
 
     @NotEmpty(message = "")
-    private String address;
+    private String mainAddress;
 
     @NotEmpty(message = "")
     private String detailAddress;
@@ -36,7 +36,7 @@ public class PlaceForm {
     public PlaceForm(Place place) {
         this.placeName = place.getPlaceName();
         this.postcodes = place.getAddress().getPostcodes();
-        this.address = place.getAddress().getMainAddress();
+        this.mainAddress = place.getAddress().getMainAddress();
         this.detailAddress = place.getAddress().getDetailAddress();
         this.description = place.getDescription();
         this.uploadImageFileName = place.getUploadImageFileName();

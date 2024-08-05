@@ -18,6 +18,10 @@ public class CommentRepository {
         em.persist(comment);
     }
 
+    public Comment findOne(Long commentId) {
+        return em.find(Comment.class, commentId);
+    }
+
     public List<Comment> findCommentByPlaceId(Long placeId) {
         return em.createQuery("select c from Comment c where c.place.id = :placeId", Comment.class)
                 .setParameter("placeId", placeId)

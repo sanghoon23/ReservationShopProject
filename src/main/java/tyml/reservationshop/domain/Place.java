@@ -1,5 +1,6 @@
 package tyml.reservationshop.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
 import net.minidev.json.annotate.JsonIgnore;
@@ -28,15 +29,15 @@ public class Place {
     private String category;
 
     @OneToMany(mappedBy = "place")
-    @JsonIgnore
-    private List<Comment> comments = new ArrayList<>();
+    @JsonManagedReference // 직렬화 시 이쪽에서 관리
+    private List<Comment> comments = new ArrayList<Comment>();
 
     public  Place() {
         address = new Address();
     }
     public Place(PlaceForm form) {
         this.placeName = form.getPlaceName();
-        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
+        this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
         this.description = form.getDescription();
         this.uploadImageFileName = form.getUploadImageFileName();
         this.category = form.getCategory();
@@ -44,7 +45,7 @@ public class Place {
 
     public void UpdateFromPlaceForm(PlaceForm form) {
         this.placeName = form.getPlaceName();
-        this.address = new Address(form.getPostcodes(), form.getAddress(), form.getDetailAddress());
+        this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
         this.description = form.getDescription();
         this.uploadImageFileName = form.getUploadImageFileName();
         this.category = form.getCategory();

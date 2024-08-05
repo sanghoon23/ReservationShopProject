@@ -86,7 +86,7 @@
             <a th:href="@{'/place/detail/' + ${place.getId()}}" th:text="${place.getPlaceName()}"></a>
 
                 <p class="place-address"
-                   th:text="${place.getAddress().getAddress()} + ', ' + ${place.getAddress().getDetailAddress()}"></p>
+                   th:text="${place.getAddress().getMainAddress()} + ', ' + ${place.getAddress().getDetailAddress()}"></p>
                 <p class="place-description" th:text="${place.getDescription()}"></p>
             </div>
 
