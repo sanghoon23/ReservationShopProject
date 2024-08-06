@@ -18,6 +18,8 @@ public class Comment {
 
     private Long userId;
 
+    private String userName;
+
     @Lob
     private String content;
 
@@ -33,11 +35,12 @@ public class Comment {
 
     protected Comment(){}
 
-    public Comment(String content, Long userId, Place place) {
+    public Comment(String content, Long userId, String userName, Place place) {
         this.content = content;
         this.userId = userId;
+        this.userName = userName;
         this.place = place;
-        this.createdAt = LocalDateTime.now();
+        this.createdAt = LocalDateTime.now().withSecond(0).withNano(0);
     }
 
 

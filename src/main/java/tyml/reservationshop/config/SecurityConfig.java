@@ -12,11 +12,13 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 import org.springframework.security.web.header.writers.frameoptions.XFrameOptionsHeaderWriter;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.session.web.http.SessionEventHttpSessionListenerAdapter;
 import org.springframework.web.context.request.RequestContextListener;
+import tyml.reservationshop.service.user.CustomAuthenticationSuccessHandler;
 import tyml.reservationshop.service.user.CustomOAuth2UserService;
 
 @Configuration
@@ -51,7 +53,7 @@ public class SecurityConfig {
                 .oauth2Login(login -> login
                         .userInfoEndpoint(userInfoEndpoint -> userInfoEndpoint
                                 .userService(customOAuth2UserService))
-                        .defaultSuccessUrl("/")
+                        .successHandler(customAuthenticationSuccessHandler()) // 성공 핸들러 설정
                         .failureUrl("/members/loginMemberPage?error=true"))
 
 
@@ -66,6 +68,11 @@ public class SecurityConfig {
     @Bean
     AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationSuccessHandler customAuthenticationSuccessHandler() {
+        return new CustomAuthenticationSuccessHandler();
     }
 
 }

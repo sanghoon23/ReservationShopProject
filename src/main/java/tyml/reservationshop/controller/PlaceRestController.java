@@ -1,7 +1,11 @@
 package tyml.reservationshop.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
@@ -14,7 +18,9 @@ import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.service.CommentService;
 import tyml.reservationshop.service.PlaceService;
 import tyml.reservationshop.service.user.MemberService;
+import tyml.reservationshop.service.util.UrlUtils;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,9 +37,6 @@ public class PlaceRestController {
     @GetMapping("/place/map/detail/{placeId}")
     public ResponseEntity<PlaceForm> getPlaceDetail(@PathVariable("placeId") Long placeId) {
         Place place = placeService.findOne(placeId);
-
-        log.info("place GetPlaceDeatil!!");
-
         PlaceForm placeForm = new PlaceForm(place);
 
         return ResponseEntity.ok(placeForm);
@@ -52,22 +55,32 @@ public class PlaceRestController {
     @PostMapping("/place/commentList/{placeId}")
     public ResponseEntity<CommentDto> addCommentToPlace(@PathVariable Long placeId,
                                                         @AuthenticationPrincipal User user,
-                                                        @RequestParam String content) {
-        //현재 로그인된 Member 의 userId 구하기
+                                                        HttpServletResponse response,
+                                                        HttpServletRequest request,
+                                                        @RequestParam String content) throws IOException {
+
+        //현재 로그인된 user 없다면 리다이렉트
+        if(user == null)
+        {
+            HttpSession session = request.getSession();
+            String redirectAfterLoginUrl = UrlUtils.getBaseUrl(request) + "/place/detail/" + placeId;
+            session.setAttribute("redirectAfterLogin", redirectAfterLoginUrl);
+
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized 응답
+        }
+
         String userEmail = user.getUsername();
 
         Member member = memberService.findByEmail(userEmail);
         Long userId = member.getId();
+        String userName = member.getName();
 
         Place place = placeService.findOne(placeId);
 
-        Comment comment = new Comment(content, userId, place);
+        Comment comment = new Comment(content, userId, userName, place);
         commentService.join(comment);
 
-        CommentDto commentDto = new CommentDto();
-        commentDto.setContent(comment.getContent());
-        commentDto.setCreatedAt(comment.getUpdateAt());
-
+        CommentDto commentDto = CommentDto.from(comment);
         return ResponseEntity.ok(commentDto);
     }
 

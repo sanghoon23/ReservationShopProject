@@ -64,7 +64,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         }
 
 
-        String username = providerTypeCode + userInfo.getName();
+        String username = providerTypeCode + '_' + userInfo.getName();
         String email = userInfo.getEmail();
 
         Member member = null;

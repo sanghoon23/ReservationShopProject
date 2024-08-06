@@ -11,14 +11,16 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 public class CommentDto {
+    private String userName;
     private String content;
-    private LocalDateTime createdAt;
+    private LocalDateTime createDateTime;
 
     // Factory method to create CommentForm from Comment
     public static CommentDto from(Comment comment) {
         CommentDto form = new CommentDto();
+        form.setUserName(comment.getUserName());
         form.setContent(comment.getContent());
-        form.setCreatedAt(comment.getCreatedAt());
+        form.setCreateDateTime(comment.getCreatedAt());
         return form;
     }
 }
