@@ -21,6 +21,17 @@ public class CommentService {
         return comment.getId();
     }
 
+    @Transactional
+    public void updateComment(Long commentId, String content) {
+        Comment findComment = commentRepository.findOne(commentId);
+        findComment.setContent(content);
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        commentRepository.deleteCommentByCommentId(commentId);
+    }
+
     /*
     @Comment
 ************************************************************************************************************************************

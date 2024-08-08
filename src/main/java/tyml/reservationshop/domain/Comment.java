@@ -2,6 +2,7 @@ package tyml.reservationshop.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.scheduling.quartz.LocalDataSourceJobStore;
 
@@ -21,6 +22,7 @@ public class Comment {
     private String userName;
 
     @Lob
+    @Setter
     private String content;
 
     private LocalDateTime createdAt;
@@ -30,8 +32,6 @@ public class Comment {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "place_id")
     private Place place;
-
-
 
     protected Comment(){}
 

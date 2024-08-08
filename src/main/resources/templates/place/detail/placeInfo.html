@@ -123,6 +123,8 @@
 
             function addCommentToDOM(comment) {
 
+                var placeId = getUrlDetailNumber();
+
                 var commentDiv = $('<div class="comment"></div>');
 
                 var headerDiv = $('<div class="comment-header"></div>');
@@ -135,6 +137,47 @@
                 var contentDiv = $('<div class="comment-content"></div>').text(comment.content);
                 commentDiv.append(headerDiv);
                 commentDiv.append(contentDiv);
+
+                if (comment.userId === comment.currentUserId) {
+                    var editButton = $('<button class="edit-comment">수정</button>').click(function () {
+                        var newContent = prompt('수정할 내용을 입력하세요:', comment.content);
+                        if (newContent) {
+                            $.ajax({
+                                url: '/api/place/' + placeId + '/comment/update/' + comment.commentId,
+                                method: 'PUT',
+                                data: {
+                                    content: newContent,
+                                },
+                                success: function (data) {
+                                    contentDiv.text(newContent);
+                                },
+                                error: function (error) {
+                                    alert('댓글 수정 실패');
+                                    console.error("댓글 수정 실패:", error.responseText);
+                                }
+                            });
+                        }
+                    });
+
+                    var deleteButton = $('<button class="delete-comment">삭제</button>').click(function () {
+                        if (confirm('정말 삭제하시겠습니까?')) {
+                            $.ajax({
+                                url: '/api/place/' + placeId + '/comment/delete/' + comment.commentId,
+                                method: 'DELETE',
+                                success: function () {
+                                    commentDiv.remove();
+                                },
+                                error: function (error) {
+                                    alert('댓글 삭제 실패');
+                                    console.error("댓글 삭제 실패:", error.responseText);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                commentDiv.append(editButton);
+                commentDiv.append(deleteButton);
 
                 $('#comments').prepend(commentDiv);
             }
@@ -163,8 +206,8 @@
                     url: '/api/place/commentList/' + placeId,
                     method: 'GET',
                     dataType: 'json',
-                    success: function (data){
-                        data.forEach(function(comment) {
+                    success: function (data){ // data = commentList 객체
+                        data.forEach(function(comment) { // comment[i] 객체
                             addCommentToDOM(comment);
                         });
                     },

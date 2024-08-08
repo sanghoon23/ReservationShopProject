@@ -43,12 +43,19 @@ public class PlaceRestController {
     }
 
     @GetMapping("/place/commentList/{placeId}")
-    public ResponseEntity<List<CommentDto>> getPlaceCommentList(@PathVariable("placeId") Long placeId) {
+    public ResponseEntity<List<CommentDto>> getPlaceCommentList(@PathVariable("placeId") Long placeId,
+                                                                @AuthenticationPrincipal User user) {
+
+        String userEmail = user.getUsername();
+        Member member = memberService.findByEmail(userEmail);
+        Long currentUserId = member.getId();
 
         List<Comment> commentList = commentService.findByPlaceId(placeId);
 
         List<CommentDto> commentDtos = commentList.stream()
-                .map(CommentDto::from).collect(Collectors.toList());
+                .map( comment -> CommentDto.from(comment, currentUserId))
+                .collect(Collectors.toList());
+
         return ResponseEntity.ok(commentDtos);
     }
 
@@ -70,18 +77,36 @@ public class PlaceRestController {
         }
 
         String userEmail = user.getUsername();
-
         Member member = memberService.findByEmail(userEmail);
-        Long userId = member.getId();
+        Long currentUserId = member.getId();
         String userName = member.getName();
 
         Place place = placeService.findOne(placeId);
 
-        Comment comment = new Comment(content, userId, userName, place);
+        Comment comment = new Comment(content, currentUserId, userName, place);
         commentService.join(comment);
 
-        CommentDto commentDto = CommentDto.from(comment);
+        CommentDto commentDto = CommentDto.from(comment, currentUserId);
         return ResponseEntity.ok(commentDto);
     }
+
+    @PutMapping("/place/{placeId}/comment/update/{commentId}")
+    public ResponseEntity<Void> updateCommentInPlace(@PathVariable Long placeId,
+                                                     @PathVariable Long commentId,
+                                                     @RequestParam String content) {
+
+        commentService.updateComment(commentId, content);
+        return ResponseEntity.noContent().build();
+    }
+
+
+    @DeleteMapping("/place/{placeId}/comment/delete/{commentId}")
+    public ResponseEntity<Void> deleteCommentInPlace(@PathVariable Long placeId,
+                                                     @PathVariable Long commentId) {
+
+        commentService.deleteComment(commentId);
+        return ResponseEntity.noContent().build();
+    }
+
 
 }

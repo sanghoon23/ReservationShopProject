@@ -28,4 +28,12 @@ public class CommentRepository {
                 .getResultList();
     }
 
+    public void deleteCommentByCommentId(Long commentId) {
+
+        em.createQuery("DELETE FROM Comment c WHERE c.id = :commentId")
+                .setParameter("commentId", commentId)
+                .executeUpdate();
+
+    }
+
 }
