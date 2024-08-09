@@ -46,9 +46,17 @@ public class PlaceRestController {
     public ResponseEntity<List<CommentDto>> getPlaceCommentList(@PathVariable("placeId") Long placeId,
                                                                 @AuthenticationPrincipal User user) {
 
-        String userEmail = user.getUsername();
-        Member member = memberService.findByEmail(userEmail);
-        Long currentUserId = member.getId();
+        final Long currentUserId;
+
+        if (user != null) {
+            String userEmail = user.getUsername();
+            Member member = memberService.findByEmail(userEmail);
+            currentUserId = member.getId();
+        }
+        else{
+            currentUserId = -1L;
+        }
+
 
         List<Comment> commentList = commentService.findByPlaceId(placeId);
 
@@ -59,20 +67,15 @@ public class PlaceRestController {
         return ResponseEntity.ok(commentDtos);
     }
 
-    @PostMapping("/place/commentList/{placeId}")
+    @PostMapping("/place/comment/add/{placeId}")
     public ResponseEntity<CommentDto> addCommentToPlace(@PathVariable Long placeId,
                                                         @AuthenticationPrincipal User user,
                                                         HttpServletResponse response,
                                                         HttpServletRequest request,
                                                         @RequestParam String content) throws IOException {
 
-        //현재 로그인된 user 없다면 리다이렉트
-        if(user == null)
-        {
-            HttpSession session = request.getSession();
-            String redirectAfterLoginUrl = UrlUtils.getBaseUrl(request) + "/place/detail/" + placeId;
-            session.setAttribute("redirectAfterLogin", redirectAfterLoginUrl);
 
+        if (user == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build(); // 401 Unauthorized 응답
         }
 

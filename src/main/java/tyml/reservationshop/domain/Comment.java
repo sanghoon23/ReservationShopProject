@@ -7,6 +7,7 @@ import net.minidev.json.annotate.JsonIgnore;
 import org.springframework.scheduling.quartz.LocalDataSourceJobStore;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @Entity
@@ -25,7 +26,7 @@ public class Comment {
     @Setter
     private String content;
 
-    private LocalDateTime createdAt;
+    private String createdAt;
 
     private LocalDateTime updateAt;
 
@@ -40,7 +41,9 @@ public class Comment {
         this.userId = userId;
         this.userName = userName;
         this.place = place;
-        this.createdAt = LocalDateTime.now().withSecond(0).withNano(0);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        this.createdAt = LocalDateTime.now().withSecond(0).withNano(0).format(formatter);
+
     }
 
 

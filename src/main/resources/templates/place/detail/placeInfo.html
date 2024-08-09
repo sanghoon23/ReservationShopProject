@@ -229,8 +229,11 @@
                 var placeId = getUrlDetailNumber();
 
                 $.ajax({
-                    url: '/api/place/commentList/' + placeId,
+                    url: '/api/place/comment/add/' + placeId,
                     method: 'POST',
+                    headers: {
+                        'OriginURL': window.location.href // 현재 페이지의 URL을 헤더에 포함
+                    },
                     data: {
                         content: content,
                     },
@@ -240,12 +243,14 @@
                     },
                     error: function (error) {
 
-                        if (error.status === 401) { // 인증 실패 ( 사용자 로그인 안됨. )
+                        if (error.status === 401) {
+                            console.error("error status: 401", error.responseText);
                             window.location.href = '/members/loginMemberPage'; // 로그인 페이지로 리다이렉트
                         } else {
                             alert('댓글 추가 실패');
                             console.error("댓글 추가 실패:", error.responseText);
                         }
+
                     }
                 });
             });

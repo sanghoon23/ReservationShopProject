@@ -76,8 +76,6 @@ public class MailSendService {
             //redis 인증번호 저장
             utilRedis.setDataAndTime(authNumber, toMail, 60*5L);
 
-            log.info("Auth number {} saved to Redis for email {}", authNumber, toMail);
-
         } catch (MessagingException e) {
             log.error("Failed to send email to {}", toMail, e);
             throw new RuntimeException("Failed to send email", e);

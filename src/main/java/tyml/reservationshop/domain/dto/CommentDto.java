@@ -17,7 +17,7 @@ public class CommentDto {
     private Long commentId;
     private String content;
 
-    private LocalDateTime createDateTime;
+    private String createDateTime;
 
     private Long currentUserId = 0L;
 
