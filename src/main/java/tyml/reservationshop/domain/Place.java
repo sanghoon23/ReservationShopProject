@@ -3,7 +3,6 @@ package tyml.reservationshop.domain;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Getter;
-import net.minidev.json.annotate.JsonIgnore;
 import tyml.reservationshop.domain.dto.PlaceForm;
 
 import java.util.ArrayList;
@@ -31,6 +30,10 @@ public class Place {
     @OneToMany(mappedBy = "place")
     @JsonManagedReference // 직렬화 시 이쪽에서 관리
     private List<Comment> comments = new ArrayList<Comment>();
+
+    @OneToMany(mappedBy = "place")
+    private List<Reservation> reservations = new ArrayList<Reservation>();
+
 
     public  Place() {
         address = new Address();

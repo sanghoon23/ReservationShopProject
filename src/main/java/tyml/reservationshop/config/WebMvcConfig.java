@@ -24,6 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/api/place/comment/add/**")
                 .addPathPatterns("/place/placeList")
+                .addPathPatterns("/reservation/createReservationForm")
                 .order(1); // 순서 설정
     }
 
@@ -35,12 +36,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
      */
 
     @Value("${file.add}")
-    private String potoUploadPath;
+    private String photoUploadPath;
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/upload/**")
-                .addResourceLocations("file:" + potoUploadPath + "/");
+                .addResourceLocations("file:" + photoUploadPath + "/");
     }
 
 }

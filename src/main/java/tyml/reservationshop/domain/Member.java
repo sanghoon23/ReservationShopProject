@@ -1,7 +1,6 @@
 package tyml.reservationshop.domain;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
 import lombok.Getter;
 import lombok.Setter;
 import tyml.reservationshop.domain.dto.MemberForm;
@@ -33,7 +32,7 @@ public class Member {
     private Address address;
 
     @OneToMany(mappedBy = "member")
-    private List<Reserv> Reservs = new ArrayList<Reserv>();
+    private List<Reservation> reservations = new ArrayList<Reservation>();
 
     public Member() {
         address = new Address();

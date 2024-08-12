@@ -97,11 +97,13 @@
 
         .button-container {
             display: flex;
+            justify-content: center; /* 수평 가운데 정렬 */
+            align-items: center; /* 수직 가운데 정렬 */
             gap: 10px; /* 버튼 간 간격을 조절하기 위해 사용 */
         }
 
         .image-button {
-            width: 100px;
+            width: 50px;
             height: 50px;
         }
 
@@ -149,10 +151,10 @@
 
         <div class="form-floating button-container">
             <a th:href="@{/oauth2/authorization/kakao}">
-                <img src="/images/logo/kakao_login_medium_narrow.png" class ="image-button" >
+                <img src="/images/logo/kakao_login_logo.png" class ="image-button" >
             </a>
             <a th:href="@{/oauth2/authorization/naver}">
-                <img src="/images/logo/naver_login_btnG.png" class ="image-button">
+                <img src="/images/logo/naver_login_logo.png" class ="image-button">
             </a>
 
             <a th:href="@{/oauth2/authorization/google}">
