@@ -28,11 +28,4 @@ public class HomeController {
 
         return "home";
     }
-
-    @GetMapping("/place/kakaoMapAPITest")
-    public String kakaoMapAPITest(Model model) {
-
-
-        return "/place/kakaoMapAPITest";
-    }
 }

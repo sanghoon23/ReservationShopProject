@@ -29,7 +29,6 @@ import java.util.*;
 @RequiredArgsConstructor
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
 
     @Override
