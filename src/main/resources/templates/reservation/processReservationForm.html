@@ -154,66 +154,33 @@
 
 <h2 class="centered mb-3">예약하기</h2>
 
-
-<div class = "flex-container">
-    <div class="current-time-container">
-        <span id="currentTime"></span>
-    </div>
-    <div class="today-container">
-        <span class="today-label">오늘 날짜:</span>
-        <div class="today-highlight-box"></div>
-    </div>
-
-</div>
-
-<div class="centered mb-3">
-    <button onclick="previousMonth()"><<</button>
-    <span id="currentMonth"></span>
-    <button onclick="nextMonth()">>></button>
-</div>
-
-<!-- 고정 크기의 달력 컨테이너 -->
-<div class="calendar-container">
-    <table>
-        <thead>
-        <tr>
-            <th>일</th>
-            <th>월</th>
-            <th>화</th>
-            <th>수</th>
-            <th>목</th>
-            <th>금</th>
-            <th>토</th>
-        </tr>
-        </thead>
-        <tbody id="calendarBody"></tbody>
-    </table>
-</div>
-
-<!-- 시간 슬롯을 표시할 컨테이너 추가 -->
-<div id="timeSlotsContainer" class="time-slots mt-3 mb-3"></div>
-
 <!-- 사용자 정보 입력 폼 -->
 <div class="user-info-form">
     <div class = "centered">
-        <h3>예약 정보</h3>
+        <h3>예약자 정보</h3>
     </div>
     <form id="reservationForm">
         <div class="form-group">
-            <label for="date">날짜:</label>
-            <input type="email" id="date" name="date" required>
+            <label for="name">이름:</label>
+            <input type="text" id="name" name="name" required>
         </div>
         <div class="form-group">
-            <label for="time">시간:</label>
-            <input type="text" id="time" name="time" required>
+            <label for="email">이메일:</label>
+            <input type="email" id="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label for="contact">연락처:</label>
+            <input type="tel" id="contact" name="contact" required>
+        </div>
+        <div class="form-group">
+            <label for="request">요청사항:</label>
+            <textarea id="request" name="request"></textarea>
         </div>
         <div class="form-group centered">
             <button type="submit">다음 단계</button>
         </div>
     </form>
 </div>
-
-<script type="module" src = "/js/reservation/createReservationFormScript.js"></script>
 
 </body>
 </html>
