@@ -18,8 +18,17 @@ public class MemberRepository {
     private final EntityManager em;
 
 
+    @Transactional
     public void save(Member member) {
         em.persist(member);
+    }
+
+    @Transactional
+    public void deleteMemberByMemberId(Long memberId) {
+
+        em.createQuery("DELETE FROM Member p WHERE p.id = :memberId")
+                .setParameter("memberId", memberId)
+                .executeUpdate();
     }
 
     public Member findOne(Long memberId) {
@@ -46,14 +55,6 @@ public class MemberRepository {
         } catch (NoResultException e) {
             return null;
         }
-    }
-
-    public void deleteMemberByMemberId(Long memberId) {
-
-        em.createQuery("DELETE FROM Member p WHERE p.id = :memberId")
-                .setParameter("memberId", memberId)
-                .executeUpdate();
-
     }
 
 }

@@ -2,6 +2,7 @@ package tyml.reservationshop.service.user;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -30,6 +31,10 @@ import java.util.*;
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
+
+    @Value("${user.random.password}")
+    private String userRandomPassword;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
@@ -73,7 +78,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             MemberForm form = new MemberForm();
             form.setName(username);
             form.setEmail(email);
-            form.setPw("1234"); //TODO : 임의 비밀번호
+            form.setPw(passwordEncoder.encode(userRandomPassword)); //TODO : 임의 비밀번호 -> 환경변수로 바꾸기
 
             member = new Member(form);
             memberRepository.save(member); //@DB 저장

@@ -80,4 +80,10 @@ server:
 file:
   add: ${PATH_IMAGEADD}
 
+admin:
+  password: ${PASSWORD_ADMIN}
+
+user:
+  random:
+    password: ${PASSWORD_RANDOM_USER}
 
