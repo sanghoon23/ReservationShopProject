@@ -1,13 +1,14 @@
 package tyml.reservationshop.domain;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Item {
 
     @Id
@@ -20,5 +21,18 @@ public class Item {
     private Long price;
 
     private String uploadImageFileName;
+
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "place_id")
+    private Place place;
+
+    @Builder
+    public Item(String itemName, Long price, String uploadImageFileName, Place place) {
+        this.itemName = itemName;
+        this.price = price;
+        this.uploadImageFileName = uploadImageFileName;
+        this.place = place;
+    }
 
 }

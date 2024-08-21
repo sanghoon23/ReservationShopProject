@@ -24,6 +24,19 @@
             flex: 1;
         }
 
+        .container img {
+            width: 100px;
+            height: 120px;
+            border-radius: 10%;
+            margin-right: 10px;
+        }
+
+        table {
+            table-layout: fixed; /* 모든 셀의 너비를 동일하게 설정 */
+            width: 100%; /* 테이블이 전체 너비를 차지하도록 설정 */
+        }
+
+
     </style>
 
 </head>
@@ -47,6 +60,7 @@
                     <th>상세주소</th>
                     <th>설명란</th>
                     <th>이미지경로</th>
+                    <th>상품목록</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -61,6 +75,14 @@
 
                     <td><button th:onclick="|location.href='@{/place/modifyPlaceForm/}' + ${place.getId()}|">수정</button></td>
                     <td><button th:onclick="|location.href='@{/place/deletePlace/}' + ${place.getId()}|">삭제</button></td>
+
+                    <!-- 여기에 item 정보 나열 -->
+                    <td th:each="item : ${place.getItems()}">
+                        <span th:text="|상품명: ${item.getItemName()}|"></span><br>
+                        <span th:text="|가격:  ${item.getPrice()}|"></span><br>
+                        <span th:text="|이미지파일 경로: ${item.getUploadImageFileName()}|"></span><br>
+                        <img th:src="@{/upload/} + ${item.getUploadImageFileName()}" alt="Item Image"> <!-- 이미지 -->
+                    </td>
 
                 </tr>
                 </tbody>

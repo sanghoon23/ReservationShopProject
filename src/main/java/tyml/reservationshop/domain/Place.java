@@ -27,11 +27,13 @@ public class Place {
 
     private String category;
 
-    @OneToMany(mappedBy = "place")
-    @JsonManagedReference // 직렬화 시 이쪽에서 관리
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<Comment>();
 
-    @OneToMany(mappedBy = "place")
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Item> items = new ArrayList<Item>();
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations = new ArrayList<Reservation>();
 
 
@@ -46,7 +48,7 @@ public class Place {
         this.category = form.getCategory();
     }
 
-    public void UpdateFromPlaceForm(PlaceForm form) {
+    public void updateFromPlaceForm(PlaceForm form) {
         this.placeName = form.getPlaceName();
         this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
         this.description = form.getDescription();

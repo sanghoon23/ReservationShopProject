@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Comment;
+import tyml.reservationshop.domain.Item;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.Place;
 import tyml.reservationshop.domain.dto.PlaceForm;
@@ -28,15 +29,25 @@ public class PlaceService {
     }
 
     @Transactional
+    public void addItem(Long placeId, Item item) {
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        findPlace.getItems().add(item);
+    }
+
+    @Transactional
     public void updatePlace(Long placeId, PlaceForm placeForm) {
 
-        Place findPlace = placeRepository.findOne(placeId);
-        findPlace.UpdateFromPlaceForm(placeForm);
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        findPlace.updateFromPlaceForm(placeForm);
     }
 
     @Transactional
     public void deletePlace(Long placeId) {
-        placeRepository.deletePlaceByPlaceId(placeId);
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        placeRepository.delete(findPlace);
     }
 
 
@@ -46,7 +57,8 @@ public class PlaceService {
      */
 
     public Place findOne(Long placeId) {
-        return placeRepository.findOne(placeId);
+        return placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
     }
 
     public List<Place> findAll() {
