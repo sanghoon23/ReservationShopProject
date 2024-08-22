@@ -78,7 +78,11 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             MemberForm form = new MemberForm();
             form.setName(username);
             form.setEmail(email);
-            form.setPw(passwordEncoder.encode(userRandomPassword)); //TODO : 임의 비밀번호 -> 환경변수로 바꾸기
+            form.setPw(passwordEncoder.encode(userRandomPassword));
+            form.setPhoneNumber(" ");
+            form.setPostcodes(" ");
+            form.setMainAddress(" ");
+            form.setDetailAddress(" ");
 
             member = new Member(form);
             memberRepository.save(member); //@DB 저장

@@ -23,13 +23,16 @@ public class CommentService {
 
     @Transactional
     public void updateComment(Long commentId, String content) {
-        Comment findComment = commentRepository.findOne(commentId);
+        Comment findComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID: " + commentId));
         findComment.setContent(content);
     }
 
     @Transactional
     public void deleteComment(Long commentId) {
-        commentRepository.deleteCommentByCommentId(commentId);
+        Comment findComment = commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID: " + commentId));
+        commentRepository.delete(findComment);
     }
 
     /*
@@ -38,11 +41,12 @@ public class CommentService {
      */
 
     public Comment findOne(Long commentId) {
-        return commentRepository.findOne(commentId);
+        return commentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID: " + commentId));
     }
 
     public List<Comment> findByPlaceId(Long placeId) {
-        return commentRepository.findCommentByPlaceId(placeId);
+        return commentRepository.findByPlaceId(placeId);
     }
 
 }

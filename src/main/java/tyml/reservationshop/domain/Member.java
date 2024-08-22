@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import tyml.reservationshop.domain.dto.MemberForm;
+import tyml.reservationshop.domain.dto.MemberModifyForm;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,7 +30,7 @@ public class Member {
 
 
     @Embedded
-    private Address address;
+    private Address address = new Address();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL)
     private List<Reservation> reservations = new ArrayList<Reservation>();
@@ -52,6 +53,13 @@ public class Member {
         this.pw = form.getPw();
         this.phoneNumber = form.getPhoneNumber();
         this.email = form.getEmail();
+        this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
+    }
+
+    public void UpdateFromMemberModifyForm(MemberModifyForm form)
+    {
+        this.name = form.getName();
+        this.phoneNumber = form.getPhoneNumber();
         this.address = new Address(form.getPostcodes(), form.getMainAddress(), form.getDetailAddress());
     }
 

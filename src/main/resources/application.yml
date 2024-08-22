@@ -81,6 +81,7 @@ file:
   add: ${PATH_IMAGEADD}
 
 admin:
+  id: ${ID_ADMIN}
   password: ${PASSWORD_ADMIN}
 
 user:

@@ -20,5 +20,4 @@ public class ReservationService {
         reservationRepository.save(reservation);
         return reservation.getId();
     }
-
 }

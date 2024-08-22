@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -37,7 +39,16 @@
 
 <main>
     <h2>환영합니다!</h2>
-    <p>여기는 관리자 페이지입니다.</p>
+    <p>여기는 임시 관리자 페이지입니다.</p>
+
+    <button th:onclick="|location.href='@{/members/logout}'|" sec:authorize="isAuthenticated()"
+            class="btn btn-primary rounded-pill px-3" type="button">로그아웃</button>
+
+<!--    <a class="nav-link" sec:authorize="isAnonymous()"-->
+<!--       th:href="@{/members/loginMemberPage}">로그인</a>-->
+<!--    <a class="nav-link" sec:authorize="isAuthenticated()"-->
+<!--       href="/members/logout">로그아웃</a>-->
+
 </main>
 
 <footer>

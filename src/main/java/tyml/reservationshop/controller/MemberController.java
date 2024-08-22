@@ -19,6 +19,7 @@ import tyml.reservationshop.domain.dto.EmailSenderDto;
 import tyml.reservationshop.domain.dto.LoginForm;
 import tyml.reservationshop.domain.Member;
 import tyml.reservationshop.domain.dto.MemberForm;
+import tyml.reservationshop.domain.dto.MemberModifyForm;
 import tyml.reservationshop.service.user.MemberService;
 
 import java.util.List;
@@ -106,16 +107,17 @@ public class MemberController {
         model.addAttribute("memberId", memberId);
 
         Member member = memberService.findOne(memberId);
-        model.addAttribute("memberForm", new MemberForm(member));
+        model.addAttribute("memberModifyForm", new MemberModifyForm(member));
 
         return "/members/modifyMemberForm";
     }
 
-    @PostMapping("/members/modifyMemberForm/{memberId}")
-    public String modifyMemberForm(@PathVariable("memberId") Long memberId,
+    @PostMapping("/members/modifyMemberForm/modify/{memberId}")
+    public String submitModifyMemberForm(@PathVariable("memberId") Long memberId,
                                    @RequestParam(value = "cancel", required = false) String cancel,
-                                   @Valid MemberForm memberForm,
+                                   @Valid MemberModifyForm memberModifyForm,
                                    BindingResult bindingResult) {
+
 
         if ("true".equals(cancel)) {
             return "redirect:/members/memberList";
@@ -125,7 +127,7 @@ public class MemberController {
             return "/members/modifyMemberForm";
         }
 
-        memberService.updateMember(memberId, memberForm);
+        memberService.updateMember(memberId, memberModifyForm);
 
         return "redirect:/members/memberList";
     }

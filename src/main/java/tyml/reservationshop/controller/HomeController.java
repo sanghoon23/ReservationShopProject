@@ -12,12 +12,7 @@ import tyml.reservationshop.service.PlaceService;
 @Slf4j
 @Controller
 @RequiredArgsConstructor
-public class HomeController {
-
-//    @RequestMapping(value = "/", method = RequestMethod.GET)
-//    public String index() {
-//        return "index";
-//    }
+public class    HomeController {
 
     private final PlaceService placeService;
 

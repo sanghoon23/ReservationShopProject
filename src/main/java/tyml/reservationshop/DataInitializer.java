@@ -15,6 +15,9 @@ import tyml.reservationshop.repository.MemberRepository;
 @RequiredArgsConstructor
 public class DataInitializer implements CommandLineRunner {
 
+    @Value("${admin.id}")
+    private String adminId;
+
     @Value("${admin.password}")
     private String adminPassword;
 
@@ -26,10 +29,9 @@ public class DataInitializer implements CommandLineRunner {
         // Admin 계정이 존재하지 않을 경우 추가
         if (memberRepository.findByEmail("admin@ReservationShop.com") == null) {
 
-            log.info("Data Initializer admin empty IN!!");
             MemberForm form = new MemberForm();
             form.setName("관리자");
-            form.setEmail("admin@ReservationShop.com");
+            form.setEmail(adminId);
             form.setPw(adminPassword); //관리자 비밀번호
             form.setPw(passwordEncoder.encode(form.getPw()));
 
