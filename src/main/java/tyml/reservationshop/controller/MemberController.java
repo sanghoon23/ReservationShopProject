@@ -1,5 +1,6 @@
 package tyml.reservationshop.controller;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.Getter;
@@ -114,9 +115,9 @@ public class MemberController {
 
     @PostMapping("/members/modifyMemberForm/modify/{memberId}")
     public String submitModifyMemberForm(@PathVariable("memberId") Long memberId,
-                                   @RequestParam(value = "cancel", required = false) String cancel,
-                                   @Valid MemberModifyForm memberModifyForm,
-                                   BindingResult bindingResult) {
+                                         @RequestParam(value = "cancel", required = false) String cancel,
+                                         @Valid MemberModifyForm memberModifyForm,
+                                         BindingResult bindingResult) {
 
 
         if ("true".equals(cancel)) {
@@ -139,8 +140,6 @@ public class MemberController {
         memberService.deleteMember(memberId);
         return "redirect:/members/memberList";
     }
-
-
 
     //*************************************************************************
 

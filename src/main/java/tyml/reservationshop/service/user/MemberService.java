@@ -1,6 +1,7 @@
 package tyml.reservationshop.service.user;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Member;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final PasswordEncoder passwordEncoder;
 
     //회원 가입
     @Transactional
@@ -30,6 +32,13 @@ public class MemberService {
         Member findMember = memberRepository.findById(memberId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid member ID : " + memberId));
         findMember.UpdateFromMemberModifyForm(memberForm);
+    }
+
+    @Transactional
+    public void updatePassword(Long memberId, String changePw){
+        Member findMember = memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID : " + memberId));
+        findMember.setPw(passwordEncoder.encode(changePw));
     }
 
 

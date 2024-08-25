@@ -23,4 +23,11 @@ public class    HomeController {
 
         return "home";
     }
+
+
+    @GetMapping("/successPage")
+    public String successPage() {
+        return "/myPage/myPageModifyUserInfoSuccess";
+    }
+
 }
