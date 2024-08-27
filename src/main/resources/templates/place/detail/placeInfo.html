@@ -6,6 +6,8 @@
 
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
+    <link href="/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+
     <!-- 카카오 MAP API -->
     <script type="text/javascript" src="//dapi.kakao.com/v2/maps/sdk.js?appkey=e87d74a796662fb3a8f10f714110bb02&libraries=services"></script>
     <script src="/js/kakaoMapFunction.js"></script>
@@ -13,11 +15,10 @@
     <title>장소 상세 정보</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f5f5f5;
+            padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+            min-height: 100vh;
         }
+
         .container {
             width: 100%;
             max-width: 800px;
@@ -112,6 +113,11 @@
 </head>
 <body>
 
+<!-- layout body -->
+<div th:replace="~{fragments/layout :: body}"></div>
+
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
 
 <div class="container">
     <div class="header">
@@ -128,7 +134,7 @@
 
     <div id="map"></div>
 
-    <button th:onclick="|location.href='@{/reservation/createReservationForm}'|"
+    <button th:onclick="|location.href='@{/reservation/createReservationForm/}' + ${place.getId()}|"
             class="btn btn-primary rounded-pill px-3" type="button">예약하기</button>
 
 

@@ -34,6 +34,12 @@ function updateAvailableTimes(date) {
             timeSlot.addEventListener('click', function () {
                 document.querySelectorAll('#timeSlotsContainer .time-slot').forEach(slot => slot.classList.remove('selected'));
                 timeSlot.classList.add('selected');
+
+                // 선택한 시간을 숨겨진 입력 필드에 저장
+                const selectedTimeInput = document.getElementById('selectedTime');
+                if (selectedTimeInput) {
+                    selectedTimeInput.value = format(slotDate, 'HH:mm'); // 서버로 전송할 시간 포맷 설정
+                }
             });
         }
 
@@ -48,6 +54,12 @@ function updateAvailableTimes(date) {
 function handleDateClick(day) {
     const date = new Date(currentDate.getFullYear(), currentDate.getMonth(), day);
     updateAvailableTimes(date);
+
+    // 선택한 날짜를 숨겨진 입력 필드에 저장
+    const selectedDateInput = document.getElementById('selectedDate');
+    if (selectedDateInput) {
+        selectedDateInput.value = format(date, 'yyyy-MM-dd'); // 서버로 전송할 날짜 포맷 설정
+    }
 }
 
 // 날짜 클릭 이벤트 핸들러 추가

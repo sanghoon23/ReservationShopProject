@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,13 +12,9 @@
     <title>예약하기 Form</title>
     <style>
 
-        /* 부모 div를 flexbox로 설정하여 자식 div들을 수평 정렬 */
-        .flex-container {
-            display: flex; /* flexbox 사용 */
-            align-items: center; /* 수직 중앙 정렬 */
-            justify-content: center; /* 수평 중앙 정렬 */
-            gap: 20px; /* 두 요소 사이의 간격 조정 */
-            margin-bottom: 10px; /* 요소와 다른 요소 사이의 간격 */
+        body {
+            padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+            min-height: 100vh;
         }
 
         /* 가운데 정렬 스타일 */
@@ -26,23 +22,6 @@
             text-align: center;
         }
 
-        /* 현재 시간을 표시할 스타일 */
-        .current-time-container {
-            text-align: center;
-            margin-bottom: 10px; /* 시간과 다른 요소 사이의 간격 */
-        }
-
-        /* 달력 컨테이너 스타일 */
-        .calendar-container {
-            width: 80%; /* 페이지 너비의 80% */
-            max-width: 600px; /* 최대 너비 설정 */
-            height: auto; /* 높이는 자동으로 조절 */
-            margin: 0 auto; /* 중앙 정렬 */
-            overflow: auto; /* 내용이 넘칠 경우 스크롤 표시 */
-            border: 1px solid #ddd; /* 테두리 추가 */
-            display: flex;
-            flex-direction: column;
-        }
 
         table {
             width: 100%;
@@ -55,29 +34,6 @@
             padding: 10px;
             border: 1px solid #ddd;
             cursor: pointer;
-        }
-        .today {
-            background-color: #f0f8ff;
-        }
-        .selected {
-            background-color: #ffa;
-            font-weight: bold;
-        }
-
-        .today-container {
-            margin: 10px 0 20px 0; /* 상단 10px, 하단 20px */
-            display: flex; /* flexbox를 사용하여 수평 배치 */
-            align-items: center; /* 수직 중앙 정렬 */
-            justify-content: center; /* 수평 중앙 정렬 */
-        }
-
-        .today-highlight-box {
-            width: 20px; /* 네모박스의 너비 */
-            height: 20px; /* 네모박스의 높이 */
-            margin: 0 10px; /* 네모박스와 텍스트 사이의 간격 */
-            border: 1px solid #ddd;
-            background-color: #f0f8ff; /* 네모박스 배경색 */
-            border-radius: 4px;
         }
 
         /* 사용자 정보 폼 스타일 */
@@ -125,59 +81,75 @@
             background-color: #0056b3; /* 버튼 호버 색상 */
         }
 
-        #timeSlotsContainer {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px; /* 슬롯 간의 간격 */
+        .reservation-box {
+            border: 1px solid #ddd; /* 테두리 색상 */
+            border-radius: 10px; /* 모서리를 둥글게 */
+            padding: 20px; /* 내부 여백 */
+            max-width: 400px; /* 박스 최대 너비 설정 */
+            margin: 0 auto; /* 가운데 정렬 */
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+            background-color: #f8f9fa; /* 배경색 */
         }
 
-        .time-slot {
-            flex: 1 0 calc(16.66% - 10px); /* 한 줄에 6개 표시, gap을 고려하여 계산 */
-            box-sizing: border-box;
-            padding: 10px;
-            text-align: center;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            cursor: pointer;
-            /* 필요에 따라 추가 스타일링 */
+        .reservation-box h2 {
+            margin-top: 0; /* 제목의 상단 여백 제거 */
+            font-weight: bold; /* 텍스트 굵게 */
         }
 
-        .time-slot.disabled {
-            background-color: #f0f0f0;
-            color: #999;
-            cursor: not-allowed;
+        .reservation-box p {
+            margin: 0; /* 문단의 여백 제거 */
+            font-size: 16px; /* 폰트 크기 */
+            color: #333; /* 텍스트 색상 */
         }
 
     </style>
 </head>
 <body>
 
-<h2 class="centered mb-3">예약하기</h2>
+<!-- layout body -->
+<div th:replace="~{fragments/layout :: body}"></div>
+
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
+
+
+<!-- 예약 요약 정보 -->
+<div class="reservation-box">
+<h5>아래 내용이 맞는지 확인해주세요.</h5>
+    <br>
+    <h3 th:text="${place.getPlaceName()}"></h3>
+    <p>일정: 8.31(토) 오후 12:30</p>
+    <hr>
+    <p>주니어 컷: 15,000원</p>
+    <hr>
+    <p class="total">매장에서 결제할 금액: 15,000원</p>
+</div>
 
 <!-- 사용자 정보 입력 폼 -->
 <div class="user-info-form">
     <div class = "centered">
         <h3>예약자 정보</h3>
     </div>
-    <form id="reservationForm">
+    <form th:action="@{/reservation/register/{placeId}/{memberId}(placeId=${placeId}, memberId=${member.id})}"
+          th:object="${registerReservationForm}" th:method="post">
         <div class="form-group">
             <label for="name">이름:</label>
-            <input type="text" id="name" name="name" required>
+            <input type="text" th:value="${member.name}" id="name" name="name" readonly>
         </div>
         <div class="form-group">
             <label for="email">이메일:</label>
-            <input type="email" id="email" name="email" required>
+            <input type="email" th:value="${member.email}" id="email" name="email" readonly>
         </div>
         <div class="form-group">
             <label for="contact">연락처:</label>
-            <input type="tel" id="contact" name="contact" required>
+            <input type="tel" th:value="${member.phoneNumber}" id="contact" name="contact" readonly>
         </div>
         <div class="form-group">
             <label for="request">요청사항:</label>
             <textarea id="request" name="request"></textarea>
         </div>
         <div class="form-group centered">
-            <button type="submit">다음 단계</button>
+            <button type="submit">예약하기</button>
         </div>
     </form>
 </div>

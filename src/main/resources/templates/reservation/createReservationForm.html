@@ -12,6 +12,11 @@
     <title>예약하기 Form</title>
     <style>
 
+        body {
+            padding-top: 100px; /* Bootstrap 기본 네비게이션 바 높이 */
+            min-height: 100vh;
+        }
+
         /* 부모 div를 flexbox로 설정하여 자식 div들을 수평 정렬 */
         .flex-container {
             display: flex; /* flexbox 사용 */
@@ -148,9 +153,23 @@
             cursor: not-allowed;
         }
 
+
+        /* 체크박스 크기 조정 */
+        input[type="checkbox"] {
+            transform: scale(1.5); /* 크기 조정 (1.5배) */
+            margin-right: 10px; /* 오른쪽 마진 추가 (선택사항) */
+        }
+
+
     </style>
 </head>
 <body>
+
+<!-- layout body -->
+<div th:replace="~{fragments/layout :: body}"></div>
+
+<!-- header -->
+<div th:replace="~{fragments/bodyHeader :: header}"></div>
 
 <h2 class="centered mb-3">예약하기</h2>
 
@@ -196,17 +215,44 @@
 <!-- 사용자 정보 입력 폼 -->
 <div class="user-info-form">
     <div class = "centered">
-        <h3>예약 정보</h3>
+        <h3>예약 상품을 선택해주세요</h3>
     </div>
-    <form id="reservationForm">
-        <div class="form-group">
-            <label for="date">날짜:</label>
-            <input type="email" id="date" name="date" required>
+    <form th:action ="@{/reservation/createReservationForm/date/{placeId}(placeId = ${placeId})}" id="reservationForm"
+          th:object="${reservationForm}" method="post">
+        <!-- 숨겨진 입력 필드 추가 -->
+        <input type="hidden" id="selectedDate" th:field="*{reservDate}" />
+
+        <!-- 숨겨진 입력 필드 추가 -->
+        <input type="hidden" id="selectedTime" th:field="*{reservTime}" />
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>선택</th>
+                <th>상품명</th>
+                <th>가격</th>
+                <th>이미지</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${items}">
+                <td>
+                    <input type="checkbox" th:value="${item.id}" th:field="*{selectedItemIds}" /> <!-- selectBox -->
+                </td>
+                <td th:text="${item.itemName}"></td>
+                <td th:text="${item.price}"></td>
+                <td>
+                    <img th:src="@{/upload/} + ${item.uploadImageFileName}" alt="Item Image" width="100" />
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <!-- 오류 메시지 표시 -->
+        <div th:if="${error}" class="alert alert-danger mt-3 centered" role="alert">
+            <span th:text="${error}"></span>
         </div>
-        <div class="form-group">
-            <label for="time">시간:</label>
-            <input type="text" id="time" name="time" required>
-        </div>
+
         <div class="form-group centered">
             <button type="submit">다음 단계</button>
         </div>
