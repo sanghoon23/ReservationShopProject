@@ -21,4 +21,6 @@ public class ReservationForm {
 
     private List<Long> selectedItemIds = new ArrayList<Long>();
 
+    private List<Item> selectedItems = new ArrayList<Item>();
+
 }

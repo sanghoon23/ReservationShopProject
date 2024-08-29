@@ -34,7 +34,11 @@ public class MyPageController {
     private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/myPage/myPageReservList")
-    public String myPageReservList() {
+    public String myPageReservList(Model model,
+                                   @AuthenticationPrincipal User user) {
+
+        Member findMember = memberService.findByEmail(user.getUsername());
+        model.addAttribute("reservations", findMember.getReservations());
 
         return "/myPage/myPageReservList";
     }

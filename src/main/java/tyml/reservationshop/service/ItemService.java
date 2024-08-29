@@ -26,6 +26,10 @@ public class ItemService {
                 .orElseThrow(()-> new IllegalArgumentException("Invalid item ID:" + itemId));
     }
 
+    public List<Item> findItemsByIds(List<Long> Ids) {
+        return itemRepository.findItemsByIds(Ids);
+    }
+
     public List<Item> findByPlaceId(Long placeId) {
         return itemRepository.findByPlaceId(placeId);
     }

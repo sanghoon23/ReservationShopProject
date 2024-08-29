@@ -118,11 +118,33 @@
 <h5>아래 내용이 맞는지 확인해주세요.</h5>
     <br>
     <h3 th:text="${place.getPlaceName()}"></h3>
-    <p>일정: 8.31(토) 오후 12:30</p>
+    <span id="reservationDateAndTime"
+    th:attr="data-date=${reservationForm.reservDate}, data-time=${reservationForm.reservTime}"></span>
+
     <hr>
-    <p>주니어 컷: 15,000원</p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>상품명</th>
+            <th>가격</th>
+            <th>이미지</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="item : ${items}">
+            <td th:text="${item.itemName}"></td>
+            <td th:text="${item.price}"></td>
+            <td>
+                <img th:src="@{/upload/} + ${item.uploadImageFileName}" alt="Item Image" width="100" />
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
     <hr>
-    <p class="total">매장에서 결제할 금액: 15,000원</p>
+    <span id="totalPrice" th:attr="data-totalPrice=${totalPrice}"></span>
+
 </div>
 
 <!-- 사용자 정보 입력 폼 -->
@@ -132,27 +154,40 @@
     </div>
     <form th:action="@{/reservation/register/{placeId}/{memberId}(placeId=${placeId}, memberId=${member.id})}"
           th:object="${registerReservationForm}" th:method="post">
+
+<!--        <input type="hidden" id="postcodes" th:value="${member.address.postcodes}" th:field="*{postcodes}">-->
+<!--        <input type="hidden" id="mainAddress" th:value="${member.address.mainAddress}" th:field="*{mainAddress}">-->
+<!--        <input type="hidden" id="reservDate" th:value="${reservationForm.reservDate}" th:field="*{reservDate}">-->
+<!--        <input type="hidden" id="reservTime" th:value="${reservationForm.reservTime}" th:field="*{reservTime}">-->
+
         <div class="form-group">
             <label for="name">이름:</label>
-            <input type="text" th:value="${member.name}" id="name" name="name" readonly>
+            <input type="text" id="name" th:value="${member.name}"  readonly>
         </div>
         <div class="form-group">
             <label for="email">이메일:</label>
-            <input type="email" th:value="${member.email}" id="email" name="email" readonly>
+            <input type="email" th:value="${member.email}" id="email" readonly>
         </div>
         <div class="form-group">
             <label for="contact">연락처:</label>
-            <input type="tel" th:value="${member.phoneNumber}" id="contact" name="contact" readonly>
+            <input type="tel" th:value="${member.phoneNumber}" id="contact" readonly>
         </div>
         <div class="form-group">
             <label for="request">요청사항:</label>
-            <textarea id="request" name="request"></textarea>
+            <textarea id="request" th:field="*{requestContent}"></textarea>
         </div>
         <div class="form-group centered">
             <button type="submit">예약하기</button>
         </div>
     </form>
+
+    <!-- 오류 메시지 표시 -->
+    <div th:if="${error}" class="alert alert-danger mt-3 centered" role="alert">
+        <span th:text="${error}"></span>
+    </div>
 </div>
+
+<script type="module" src = "/js/reservation/processReservationForm.js"></script>
 
 </body>
 </html>

@@ -3,10 +3,7 @@ package tyml.reservationshop.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tyml.reservationshop.domain.Comment;
-import tyml.reservationshop.domain.Item;
-import tyml.reservationshop.domain.Member;
-import tyml.reservationshop.domain.Place;
+import tyml.reservationshop.domain.*;
 import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.CommentRepository;
 import tyml.reservationshop.repository.PlaceRepository;
@@ -36,12 +33,35 @@ public class PlaceService {
     }
 
     @Transactional
+    public void addReservation(Long placeId, Reservation reservation) {
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        findPlace.getReservations().add(reservation);
+    }
+
+    @Transactional
     public void updatePlace(Long placeId, PlaceForm placeForm) {
 
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
         findPlace.updateFromPlaceForm(placeForm);
     }
+
+
+    @Transactional
+    public void deleteReservation(Long placeId, Long reservationId) {
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        placeRepository.delete(findPlace);
+
+        Reservation findReservation = findPlace.getReservations().stream()
+                .filter(reservation -> reservation.getId().equals(reservationId))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("Reservation not found with ID : " + reservationId));
+
+        findPlace.getReservations().remove(findReservation);
+    }
+
 
     @Transactional
     public void deletePlace(Long placeId) {

@@ -34,6 +34,8 @@
         .main-content {
             margin-left: 280px;
             padding: 20px;
+            overflow-x: auto; /* 콘텐츠가 넘칠 때 가로 스크롤 생기게 설정 */
+            white-space: nowrap; /* 콘텐츠가 줄 바꿈 없이 한 줄로 표현되도록 설정 */
         }
 
         .footer {
@@ -41,6 +43,13 @@
             background-color: #f5f5f5;
             text-align: center;
             margin-top: auto; /* 푸터를 페이지 맨 아래로 밀어냄 */
+        }
+
+        .container img {
+            width: 100px;
+            height: 120px;
+            border-radius: 10%;
+            margin-right: 10px;
         }
 
     </style>
@@ -57,9 +66,49 @@
 <div th:replace="~{fragments/myPageSidebar :: sidebar(page='reservList')}"></div>
 
 
-<main class="main-content">
+<main class="container">
 
     <h2>내 예약 목록</h2>
+
+    <div class="row w-100 justify-content-center">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>예약자</th>
+                <th>예약장소</th>
+                <th>예약날짜</th>
+                <th>예약시간</th>
+                <th>요구사항</th>
+                <th>예약상품</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="reservation : ${reservations}">
+                <td th:text="${reservation.member.name}"></td>
+                <td th:text="${reservation.place.placeName}"></td>
+                <td th:text="${reservation.reservDate}"></td>
+                <td th:text="${reservation.reservTime}"></td>
+                <td th:text="${reservation.requiredContent}"></td>
+                <!--                    <td th:text="${member.getAddress() != null ? member.getAddress().getPostcodes() : ''}"></td>-->
+                <!--                    <td th:text="${member.getAddress() != null ? member.getAddress().getMainAddress() : ''}"></td>-->
+                <!--                    <td th:text="${member.getAddress() != null ? member.getAddress().getDetailAddress() : ''}"></td>-->
+
+
+                <!-- 여기에 item 정보 나열 -->
+                <td th:each="item : ${reservation.itemList}">
+                    <span th:text="|상품명: ${item.getItemName()}|"></span><br>
+                    <span th:text="|가격:  ${item.getPrice()}|"></span><br>
+                    <span th:text="|이미지파일 경로: ${item.getUploadImageFileName()}|"></span><br>
+                    <img th:src="@{/upload/} + ${item.getUploadImageFileName()}" alt="Item Image"> <!-- 이미지 -->
+                </td>
+
+
+                <td><button th:onclick="|location.href='@{/reservation/delete/}' + ${reservation.getId()}|">예약 취소</button></td>
+
+            </tr>
+            </tbody>
+        </table>
+    </div>
 
 </main>
 
