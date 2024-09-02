@@ -35,7 +35,11 @@
             margin-left: 280px;
             padding: 20px;
             overflow-x: auto; /* 콘텐츠가 넘칠 때 가로 스크롤 생기게 설정 */
-            white-space: nowrap; /* 콘텐츠가 줄 바꿈 없이 한 줄로 표현되도록 설정 */
+        }
+
+        .table-responsive {
+            overflow-x: auto; /* 테이블이 넘칠 때 가로 스크롤을 생성 */
+            white-space: nowrap; /* 테이블 셀들이 줄 바꿈 없이 한 줄로 표현되도록 설정 */
         }
 
         .footer {
@@ -45,7 +49,7 @@
             margin-top: auto; /* 푸터를 페이지 맨 아래로 밀어냄 */
         }
 
-        .container img {
+        .main-content img {
             width: 100px;
             height: 120px;
             border-radius: 10%;
@@ -66,11 +70,10 @@
 <div th:replace="~{fragments/myPageSidebar :: sidebar(page='reservList')}"></div>
 
 
-<main class="container">
-
+<main class="main-content container-fluid">
     <h2>내 예약 목록</h2>
 
-    <div class="row w-100 justify-content-center">
+    <div class="table-responsive">
         <table class="table table-striped">
             <thead>
             <tr>
@@ -98,7 +101,7 @@
                 <td th:each="item : ${reservation.itemList}">
                     <span th:text="|상품명: ${item.getItemName()}|"></span><br>
                     <span th:text="|가격:  ${item.getPrice()}|"></span><br>
-                    <span th:text="|이미지파일 경로: ${item.getUploadImageFileName()}|"></span><br>
+<!--                    <span th:text="|이미지파일 경로: ${item.getUploadImageFileName()}|"></span><br>-->
                     <img th:src="@{/upload/} + ${item.getUploadImageFileName()}" alt="Item Image"> <!-- 이미지 -->
                 </td>
 
@@ -115,7 +118,5 @@
 <!-- footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>
 
-<!-- PlaceListScript.js를 포함 -->
-<!--<script src="/js/placeListScript.js"></script>-->
 </body>
 </html>

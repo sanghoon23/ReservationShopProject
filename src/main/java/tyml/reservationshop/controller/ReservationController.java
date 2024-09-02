@@ -99,10 +99,6 @@ public class ReservationController {
                                       HttpSession session,
                                       @AuthenticationPrincipal User user) {
 
-        //TODO : User 가 맞는지 다시 확인
-        //******************************************************************************************************
-
-
         List<Item> items;
         Member member;
         ReservationForm reservationForm;
@@ -121,16 +117,22 @@ public class ReservationController {
             reservationForm = new ReservationForm();
         }
 
-        log.info("예약 성공 IN!!");
+        //@ User 가 맞는지 다시 확인
+        //******************************************************************************************************
+        Member currentMember = memberService.findByEmail(user.getUsername());
+        if(!currentMember.getId().equals(member.getId())){
+            return "/reservation/success/registerReservationUserFail";
+        }
 
 
-        //TODO : 예약 저장 및 멤버, 장소에 등록
+        //@ 예약 저장 및 멤버, 장소에 등록
         {
             Reservation reservation = Reservation.builder()
                     .member(memberService.findOne(memberId))
                     .place(placeService.findOne(placeId))
                     .reservDate(reservationForm.getReservDate())
                     .reservTime(reservationForm.getReservTime())
+                    .requiredContent(registerReservationForm.getRequestContent())
                     .build();
 
             for (Item item : items) {
@@ -139,9 +141,6 @@ public class ReservationController {
             }
 
             reservationService.join(reservation);
-
-//            memberService.addReservation(memberId, reservation);
-//            placeService.addReservation(placeId, reservation);
         }
 
 
