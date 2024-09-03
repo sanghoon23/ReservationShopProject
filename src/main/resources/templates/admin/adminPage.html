@@ -64,7 +64,7 @@
 
 <main class="main-content container-fluid">
     <h2>환영합니다!</h2>
-    <p>여기는 임시 관리자 페이지입니다.</p>
+    <p>여기는 관리자 페이지입니다.</p>
 
     <button th:onclick="|location.href='@{/members/logout}'|" sec:authorize="isAuthenticated()"
             class="btn btn-primary rounded-pill px-3" type="button">로그아웃</button>

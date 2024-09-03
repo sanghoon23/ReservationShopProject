@@ -26,9 +26,9 @@ public class Reservation {
     private Place place;
 
     // 단방향 OneToMany 관계 설정
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "reservation_id")  // 외래키를 정의합니다.
-    private List<Item> itemList = new ArrayList<>();
+    private List<UserItem> userItemList = new ArrayList<>();
 
     private String reservDate;
 

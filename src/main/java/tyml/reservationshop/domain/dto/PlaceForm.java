@@ -13,25 +13,24 @@ import java.util.List;
 @Setter
 public class PlaceForm {
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "장소 이름을 입력하세요.")
     private String placeName;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "우편 번호를 입력하세요.")
     private String postcodes;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "주소를 입력하세요.")
     private String mainAddress;
 
-    @NotEmpty(message = "")
     private String detailAddress;
 
     //예약 장소 설명
-    @NotEmpty(message = "")
+    @NotEmpty(message = "설명란을 입력하세요.")
     private String description;
 
     private String uploadImageFileName;
 
-    @NotEmpty(message = "")
+    @NotEmpty(message = "카테고리를 수정하세요.")
     private String category;
 
     public PlaceForm() {}

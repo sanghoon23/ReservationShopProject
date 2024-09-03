@@ -21,6 +21,23 @@
             min-height: 100vh;
         }
 
+        .sidebar {
+            position: fixed;
+            top: 0px; /* 네비게이션 바 바로 아래에 위치하게 조정 */
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            background-color: #343a40;
+            z-index: 1000; /* 사이드바가 다른 콘텐츠 위에 표시되도록 z-index 설정 */
+            padding-top: 20px; /* 사이드바 내용과 네비게이션 바 사이의 간격 조정 */
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            overflow-x: auto; /* 콘텐츠가 넘칠 때 가로 스크롤 생기게 설정 */
+        }
+
         .image-preview {
             max-width: 40%; /* 가로 크기 최대 100% */
             height: auto; /* 높이 자동 조절 */
@@ -28,8 +45,26 @@
             margin-top: 15px; /* 미리보기 이미지 위에 약간의 간격 추가 */
         }
 
-        .fieldError {
-            border-color: red;
+        .footer {
+            width: 100%;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin-top: auto; /* 푸터를 페이지 맨 아래로 밀어냄 */
+        }
+
+        .main-content img {
+            width: 100px;
+            height: 180px;
+            border-radius: 10%;
+            margin-right: 10px;
+        }
+
+        .error {
+            border: 1px solid red;
+        }
+        .error-message {
+            color: red;
+            font-size: small;
         }
 
     </style>
@@ -39,101 +74,109 @@
 <body>
 <!-- layout body -->
 <div th:replace="~{fragments/layout :: body}"></div>
-<!-- header -->
-<div th:replace="~{fragments/bodyHeader :: header}"></div>
 
-    <main class="w-100 m-auto">
-        <div class="row w-100 justify-content-center">
-            <div class="col-md-7 col-lg-8">
-                <h4 class="pt-3">장소 등록</h4>
-                <form class="needs-validation" novalidate
-                      th:action="@{/place/modifyPlaceForm/{placeId}(placeId=${placeId})}" th:object="${placeForm}"
-                      method="post" enctype="multipart/form-data">
+<!-- 사이드바를 포함하면서 현재 페이지 식별자 전달 -->
+<div th:replace="~{fragments/adminSidebar :: sidebar(page='placeList')}"></div>
 
-                    <div class="row g-3 pb-5">
-                        <div class="col-md-8">
-                            <div class="row g-3 pb-5">
-                                <div class="col-12">
-                                    <label th:for="placeName">상호명</label>
-                                    <input type="text" th:field="*{placeName}"
-                                           class="form-control" id="placeName" placeholder="이름"
-                                           th:class="${#fields.hasErrors('placeName')}? 'form-control fieldError' : 'form-control'">
+<main class="main-content container-fluid">
+    <div class="row w-100">
+        <div class="col-md-7 col-lg-8">
+            <h4 class="pt-3">장소 수정</h4>
+            <form class="needs-validation" novalidate
+                  th:action="@{/place/modifyPlaceForm/{placeId}(placeId=${placeId})}" th:object="${placeForm}"
+                  method="post" enctype="multipart/form-data">
 
-                                    <div class="category-container">
-                                        <label th:for="category">카테고리 분류</label>
-                                        <select id="category" th:field="*{category}" th:value="카테고리">
-                                            <option value="">카테고리 분류</option>
-                                            <option th:each="category : ${categories}" th:value="${category}" th:text="${category}">카테고리</option>
-                                        </select>
-                                    </div>
+                <div class="row g-3 pb-5">
+                    <div class="col-md-8">
+                        <div class="row g-3 pb-5">
+                            <div class="col-12">
+                                <label th:for="placeName">상호명</label>
+                                <input type="text" id="placeName" th:field="*{placeName}" class="form-control" placeholder="이름"
+                                       th:class="${#fields.hasErrors('placeName')}? 'form-control error' : 'form-control'">
+                                <div th:if="${#fields.hasErrors('placeName')}" class="error-message" th:errors="*{placeName}">Incorrect date</div>
 
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">우편번호</label>
-                                    <div class="input-group has-validation">
-                                        <input type="text" th:field="*{postcodes}"
-                                               class="form-control" id="postcodes" placeholder="12345"
-                                               th:class="${#fields.hasErrors('postcodes')}? 'form-control fieldError' : 'form-control'">
-
-                                        <input type="button" onclick="daumPostcode()" value="우편번호 찾기"><br>
-
-                                    </div>
-                                </div>
-                                <div class="col-12">
-                                    <label class="form-label">주소 <span class="text-body-secondary"></span></label>
-                                    <div class="input-group has-validation">
-                                        <input type="text" th:field="*{mainAddress}"
-                                               class="form-control" id="mainAddress" placeholder="주소"
-                                               th:class="${#fields.hasErrors('mainAddress')}? 'form-control fieldError' : 'form-control'">
-                                    </div>
+                                <div class="category-container">
+                                    <label th:for="category">카테고리 분류</label>
+                                    <select id="category" th:field="*{category}" th:value="카테고리">
+                                        <option value="">카테고리 분류</option>
+                                        <option th:each="category : ${categories}" th:value="${category}"
+                                                th:text="${category}">카테고리
+                                        </option>
+                                    </select>
+                                    <div th:if="${#fields.hasErrors('category')}" class="error-message" th:errors="*{category}">Incorrect date</div>
                                 </div>
 
-                                <div class="col-12">
-                                    <label class="form-label">상세주소 <span class="text-body-secondary"></span></label>
-                                    <div class="input-group has-validation">
-                                        <input type="text" th:field="*{detailAddress}"
-                                               class="form-control" id="detailAddress" placeholder="상세주소"
-                                               th:class="${#fields.hasErrors('detailAddress')}? 'form-control fieldError' : 'form-control'">
-                                    </div>
-                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">우편번호</label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{postcodes}"
+                                           class="form-control" id="postcodes" placeholder="12345"
+                                           th:class="${#fields.hasErrors('postcodes')}? 'form-control error' : 'form-control'">
 
-                                <div class="col-12">
-                                    <label class="form-label">설명란 <span class="text-body-secondary"></span></label>
-                                    <div class="input-group has-validation">
-                                        <input type="text" th:field="*{description}" class="form-control"
-                                               id="description" placeholder="설명란"
-                                               th:class="${#fields.hasErrors('description')}? 'form-control fieldError' : 'form-control'">
-                                    </div>
+                                    <input type="button" onclick="daumPostcode()" value="우편번호 찾기"><br>
+
+                                </div>
+                                <div th:if="${#fields.hasErrors('postcodes')}" class="error-message" th:errors="*{postcodes}">Incorrect date</div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label">주소 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{mainAddress}"
+                                           class="form-control" id="mainAddress" placeholder="주소"
+                                           th:class="${#fields.hasErrors('mainAddress')}? 'form-control error' : 'form-control'">
+                                </div>
+                                <div th:if="${#fields.hasErrors('mainAddress')}" class="error-message" th:errors="*{mainAddress}">Incorrect date</div>
+                            </div>
+
+                            <div class="col-12">
+                                <label class="form-label">상세주소 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{detailAddress}"
+                                           class="form-control" id="detailAddress" placeholder="상세주소"
+                                           th:class="${#fields.hasErrors('detailAddress')}? 'form-control error' : 'form-control'">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-md-4">
-                            <!--                            <form class="needs-validation" novalidate th:action="@{/place/createPlaceForm}" th:object="${placeForm}" method="post" enctype="multipart/form-data">-->
-                            <div class="row">
-                                <div class="col-12">
-                                    <label class="form-label">이미지 등록</label>
-                                    <div>
-                                        <input type="file" id="image" name="image" class="form-control" accept="image/*">
 
-                                    </div>
-                                    <img id="imagePreview" class="image-preview" src="#" alt="Image Preview"
-                                         style="display: none;">
+                            <div class="col-12">
+                                <label class="form-label">설명란 <span class="text-body-secondary"></span></label>
+                                <div class="input-group has-validation">
+                                    <input type="text" th:field="*{description}" class="form-control"
+                                           id="description" placeholder="설명란"
+                                           th:class="${#fields.hasErrors('description')}? 'form-control error' : 'form-control'">
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-6">
-                                <button class="btn btn-primary btn-lg w-100" type="submit">수정</button>
-                            </div>
-                            <div class="col-6">
-                                <button type="submit" name="cancel" value="true" class="btn btn-primary btn-lg w-100">취소</button>
+                                <div th:if="${#fields.hasErrors('description')}" class="error-message" th:errors="*{description}">Incorrect date</div>
                             </div>
                         </div>
                     </div>
-                </form>
-            </div>
+                    <div class="col-md-4">
+                        <!--                            <form class="needs-validation" novalidate th:action="@{/place/createPlaceForm}" th:object="${placeForm}" method="post" enctype="multipart/form-data">-->
+                        <div class="row">
+                            <div class="col-12">
+                                <label class="form-label">이미지 등록</label>
+                                <div>
+                                    <input type="file" id="image" name="image" class="form-control" accept="image/*">
+
+                                </div>
+                                <img id="imagePreview" class="image-preview" src="#" alt="Image Preview"
+                                     style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <button class="btn btn-primary btn-lg w-100" type="submit">수정</button>
+                        </div>
+                        <div class="col-6">
+                            <button type="submit" name="cancel" value="true" class="btn btn-primary btn-lg w-100">취소
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
         </div>
-    </main>
+    </div>
+</main>
 
 <!-- footer -->
 <div th:replace="~{fragments/footer :: footer}"></div>

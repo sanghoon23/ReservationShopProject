@@ -9,6 +9,8 @@ import tyml.reservationshop.domain.Place;
 import tyml.reservationshop.domain.Reservation;
 import tyml.reservationshop.repository.ReservationRepository;
 
+import java.util.List;
+
 @Service
 @Getter
 @RequiredArgsConstructor
@@ -33,6 +35,10 @@ public class ReservationService {
     public Reservation findOne(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid reservation ID : " + reservationId));
+    }
+
+    public List<Reservation> findAll() {
+        return reservationRepository.findAll();
     }
 
 }

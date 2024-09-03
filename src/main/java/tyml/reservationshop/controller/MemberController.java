@@ -121,7 +121,7 @@ public class MemberController {
 
 
         if ("true".equals(cancel)) {
-            return "redirect:/members/memberList";
+            return "redirect:/admin/memberList";
         }
 
         if (bindingResult.hasErrors()) {
@@ -130,7 +130,7 @@ public class MemberController {
 
         memberService.updateMember(memberId, memberModifyForm);
 
-        return "redirect:/members/memberList";
+        return "redirect:/admin/memberList";
     }
 
 
@@ -138,7 +138,7 @@ public class MemberController {
     public String deleteMember(@PathVariable("memberId") Long memberId) {
 
         memberService.deleteMember(memberId);
-        return "redirect:/members/memberList";
+        return "redirect:/admin/memberList";
     }
 
     //*************************************************************************

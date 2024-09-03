@@ -13,10 +13,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import tyml.reservationshop.domain.Item;
-import tyml.reservationshop.domain.Member;
-import tyml.reservationshop.domain.Place;
-import tyml.reservationshop.domain.Reservation;
+import tyml.reservationshop.domain.*;
 import tyml.reservationshop.domain.dto.AuthenticationForm;
 import tyml.reservationshop.domain.dto.MemberForm;
 import tyml.reservationshop.domain.dto.RegisterReservationForm;
@@ -119,6 +116,9 @@ public class ReservationController {
 
         //@ User 가 맞는지 다시 확인
         //******************************************************************************************************
+        if(user == null) {
+            return "/reservation/success/registerReservationUserFail";
+        }
         Member currentMember = memberService.findByEmail(user.getUsername());
         if(!currentMember.getId().equals(member.getId())){
             return "/reservation/success/registerReservationUserFail";
@@ -137,7 +137,14 @@ public class ReservationController {
 
             for (Item item : items) {
                 Item findItem = itemService.findOne(item.getId());
-                reservation.getItemList().add(findItem);
+
+                UserItem userItem = UserItem.builder()
+                        .itemName(findItem.getItemName())
+                        .price(findItem.getPrice())
+                        .uploadImageFileName(findItem.getUploadImageFileName())
+                        .build();
+
+                reservation.getUserItemList().add(userItem);
             }
 
             reservationService.join(reservation);

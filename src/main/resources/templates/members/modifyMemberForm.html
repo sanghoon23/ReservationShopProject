@@ -30,6 +30,30 @@
             min-height: 100vh;
         }
 
+        .sidebar {
+            position: fixed;
+            top: 0px; /* 네비게이션 바 바로 아래에 위치하게 조정 */
+            bottom: 0;
+            left: 0;
+            width: 280px;
+            background-color: #343a40;
+            z-index: 1000; /* 사이드바가 다른 콘텐츠 위에 표시되도록 z-index 설정 */
+            padding-top: 20px; /* 사이드바 내용과 네비게이션 바 사이의 간격 조정 */
+        }
+
+        .main-content {
+            margin-left: 280px;
+            padding: 20px;
+            overflow-x: auto; /* 콘텐츠가 넘칠 때 가로 스크롤 생기게 설정 */
+        }
+
+        .footer {
+            width: 100%;
+            background-color: #f5f5f5;
+            text-align: center;
+            margin-top: auto; /* 푸터를 페이지 맨 아래로 밀어냄 */
+        }
+
         .error {
             border: 1px solid red;
         }
@@ -46,11 +70,11 @@
 <!-- layout body -->
 <div th:replace="~{fragments/layout :: body}"></div>
 
-<!-- header -->
-<div th:replace="~{fragments/bodyHeader :: header}"></div>
+<!-- 사이드바를 포함하면서 현재 페이지 식별자 전달 -->
+<div th:replace="~{fragments/adminSidebar :: sidebar(page='memberList')}"></div>
 
-<main class="w-100 m-auto">
-    <div class="row w-100 justify-content-center">
+<main class="main-content container-fluid">
+    <div class="row w-100">
         <div class="col-md-7 col-lg-8">
             <h4 class="mb-3">회원 정보</h4>
             <form class="needs-validation" novalidate

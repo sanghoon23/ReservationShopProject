@@ -144,7 +144,7 @@ public class PlaceController {
                                   @RequestParam("image") MultipartFile image) {
 
         if ("true".equals(cancel)) {
-            return "redirect:/place/placeList";
+            return "redirect:/admin/placeList";
         }
 
         if (bindingResult.hasErrors()) {
@@ -158,7 +158,7 @@ public class PlaceController {
 
         placeService.updatePlace(placeId, placeForm);
 
-        return "redirect:/place/placeList";
+        return "redirect:/admin/placeList";
     }
 
     @GetMapping("/place/deletePlace/{placeId}")
