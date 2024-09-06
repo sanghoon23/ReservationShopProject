@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.FileCopyUtils;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -19,6 +20,7 @@ import tyml.reservationshop.service.ItemService;
 import tyml.reservationshop.service.PlaceService;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -27,6 +29,7 @@ import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -75,10 +78,10 @@ public class PlaceController {
     @PostMapping("/place/createPlaceForm")
     public String createPlaceForm(@Valid PlaceForm placeForm,
                                   BindingResult bindingResult,
-                                  @RequestParam("mainImage") MultipartFile image,
-                                  @RequestParam("productName[]") List<String> productNames,
-                                  @RequestParam("productPrice[]") List<Integer> productPrices,
-                                  @RequestParam("productImage[]") List<MultipartFile> productImages,
+                                  @RequestParam(value = "mainImage", required = false) MultipartFile image,
+                                  @RequestParam(value = "productName[]", required = false) List<String> productNames,
+                                  @RequestParam(value = "productPrice[]", required = false) List<Integer> productPrices,
+                                  @RequestParam(value = "productImage[]", required = false) List<MultipartFile> productImages,
                                   Model model) {
 
         if (bindingResult.hasErrors()) {
@@ -90,6 +93,7 @@ public class PlaceController {
             placeForm.setUploadImageFileName(saveImage(image));
         }
 
+        List<Item> itemList = new ArrayList<>();
         Place place = new Place(placeForm);
         placeService.join(place);
         for (int i = 0; i < productNames.size(); ++i) {
@@ -100,14 +104,13 @@ public class PlaceController {
                     .place(place) // set place
                     .build();
 
-            // item 저장
-            itemService.join(item);
-
-            // Place 에 item 저장
-            placeService.addItem(place.getId(), item);
+            itemList.add(item);
         }
+        //@한번의 쿼리
+        itemService.saveAll(itemList);
+        placeService.addAllItems(place.getId(), itemList);
 
-        return "home";
+        return "redirect:/admin/placeList";
     }
 
     @GetMapping("/place/placeList")
@@ -132,6 +135,7 @@ public class PlaceController {
 
         Place place = placeService.findOne(placeId);
         model.addAttribute("placeForm", new PlaceForm(place));
+        model.addAttribute("placeItems", place.getItems());
 
         return "/place/modifyPlaceForm";
     }
@@ -141,7 +145,12 @@ public class PlaceController {
                                   @RequestParam(value = "cancel", required = false) String cancel,
                                   @Valid PlaceForm placeForm,
                                   BindingResult bindingResult,
-                                  @RequestParam("image") MultipartFile image) {
+                                  @RequestParam("mainImage") MultipartFile image,
+                                  @RequestParam(value = "productName[]", required = false) List<String> productNames,
+                                  @RequestParam(value = "productPrice[]", required = false) List<Integer> productPrices,
+                                  @RequestParam(value = "productImage[]", required = false) List<MultipartFile> productImages,
+                                  @RequestParam Map<String, String> params,
+                                  @RequestParam Map<String, MultipartFile> imageParams) {
 
         if ("true".equals(cancel)) {
             return "redirect:/admin/placeList";
@@ -151,12 +160,87 @@ public class PlaceController {
             return "/place/modifyPlaceForm";
         }
 
+        Place findPlace = placeService.findOne(placeId);
+
         // 이미지 삽입
         if (!image.isEmpty()) {
+
+            if (!findPlace.getUploadImageFileName().isEmpty() && !findPlace.getUploadImageFileName().isBlank()) {
+                deleteImage(findPlace.getUploadImageFileName());
+            }
+
             placeForm.setUploadImageFileName(saveImage(image));
         }
-
         placeService.updatePlace(placeId, placeForm);
+
+
+
+        List<Item> placeItemList = placeService.findOne(placeId).getItems();
+
+        List<Item> addingItemList = new ArrayList<>();
+
+        for (Map.Entry<String, String> entry : params.entrySet()) {
+            String key = entry.getKey();
+            String value = entry.getValue();
+
+            if (key.startsWith("itemName_")) {
+                Long id = Long.parseLong(key.substring("itemName_".length()));
+                boolean isDeleted = "true".equals(params.get("delete_" + id));
+                if(isDeleted) continue;
+
+                String itemName = params.get("itemName_" + id);
+                String price = params.get("price_" + id);
+                String imageFileName = "";
+
+                //@비어있지않을 때,
+                if(!(imageParams.get("newImage_" + id).isEmpty())){
+                    imageFileName = saveImage(imageParams.get("newImage_" + id));
+                }
+                else {
+                    imageFileName = params.get("uploadImageFileName_" + id);
+                }
+
+                Item newbieItem = Item.builder()
+                        .itemName(itemName)
+                        .price(Long.parseLong(price))
+                        .uploadImageFileName(imageFileName)
+                        .place(findPlace)
+                        .build();
+
+                addingItemList.add(newbieItem);
+
+            }//@if
+        }
+
+        if(productNames != null)
+        {
+            for (int i = 0; i < productNames.size(); ++i) {
+
+                String InputUploadImageFileName = "";
+
+                Item item = Item.builder()
+                        .itemName(productNames.get(i))
+                        .price(productPrices.get(i).longValue())
+                        .uploadImageFileName(InputUploadImageFileName)
+                        .place(findPlace)
+                        .build();
+
+
+                addingItemList.add(item);
+            }
+        }
+
+        //2.itemList 를 돌면서 deleteImage
+        placeItemList.forEach(item->{
+            deleteImage(item.getUploadImageFileName());
+        });
+
+        //3. deleteAllPlaceItemList
+        placeService.deleteAllPlaceItemList(placeId);
+
+        //@한번의 쿼리
+        itemService.saveAll(addingItemList);
+        placeService.addAllItems(placeId, addingItemList);
 
         return "redirect:/admin/placeList";
     }
@@ -165,7 +249,7 @@ public class PlaceController {
     public String deletePlace(@PathVariable("placeId") Long placeId) {
 
         placeService.deletePlace(placeId);
-        return "redirect:/place/placeList";
+        return "redirect:/admin/placeList";
     }
 
     /*
@@ -195,5 +279,41 @@ public class PlaceController {
             throw new RuntimeException("Failed to store file " + image.getOriginalFilename(), e);
         }
     }
+
+    private void deleteImage(String fileName) {
+        try {
+            Path filePath = Paths.get(potoUploadPath, fileName);
+            Files.deleteIfExists(filePath);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to delete file " + fileName, e);
+        }
+    }
+
+//    public MultipartFile getMultipartFileFromSavedImage(String fileName) {
+//        try {
+//            // 저장된 파일 경로
+//            String uploadDir = potoUploadPath;
+//            File file = new File(uploadDir, fileName);
+//
+//            // 원래 파일 이름 추출
+//            String originalFileName = fileName.substring(fileName.indexOf('_') + 1);
+//
+//            // 파일을 읽어서 byte 배열로 변환
+//            FileInputStream input = new FileInputStream(file);
+//            byte[] content = FileCopyUtils.copyToByteArray(input);
+//
+//            // MockMultipartFile을 이용하여 MultipartFile로 변환
+//            MultipartFile multipartFile = new MockMultipartFile(
+//                    "file",             // 필드명
+//                    originalFileName,   // 원본 파일명
+//                    "image/jpeg",       // MIME 타입 (파일 확장자에 맞게 변경 가능)
+//                    content             // 파일 내용
+//            );
+//
+//            return multipartFile;
+//        } catch (IOException e) {
+//            throw new RuntimeException("Failed to convert file to MultipartFile", e);
+//        }
+//    }
 
 }

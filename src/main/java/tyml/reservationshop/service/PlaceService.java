@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.*;
 import tyml.reservationshop.domain.dto.PlaceForm;
 import tyml.reservationshop.repository.CommentRepository;
+import tyml.reservationshop.repository.ItemRepository;
 import tyml.reservationshop.repository.PlaceRepository;
 
 import java.util.Collections;
@@ -17,6 +18,7 @@ import java.util.List;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final ItemRepository itemRepository;
 
 
     @Transactional
@@ -33,7 +35,16 @@ public class PlaceService {
     }
 
     @Transactional
+    public void addAllItems(Long placeId, List<Item> items) {
+
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        findPlace.getItems().addAll(items); //@한번의 쿼리로 한번에 추가.
+    }
+
+    @Transactional
     public void addReservation(Long placeId, Reservation reservation) {
+
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
         findPlace.getReservations().add(reservation);
@@ -45,6 +56,17 @@ public class PlaceService {
         Place findPlace = placeRepository.findById(placeId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
         findPlace.updateFromPlaceForm(placeForm);
+    }
+
+    @Transactional
+    public void deleteAllPlaceItemList(Long placeId) {
+
+        List<Item> items = itemRepository.findByPlaceId(placeId);
+        itemRepository.deleteAll(items);
+
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+        findPlace.getItems().clear();
     }
 
 
@@ -99,7 +121,7 @@ public class PlaceService {
 
     public List<Place> findByNameContaining(String searchName) {
         // 검색어 빈 문자열인 경우
-        if(searchName.trim().isEmpty()){
+        if (searchName.trim().isEmpty()) {
             return Collections.emptyList();
         }
         return placeRepository.findByNameContaining(searchName);

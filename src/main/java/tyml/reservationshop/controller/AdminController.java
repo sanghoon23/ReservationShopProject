@@ -46,8 +46,7 @@ public class AdminController {
     }
 
     @GetMapping("/admin/reservationList")
-    public String myPageReservList(Model model,
-                                   @AuthenticationPrincipal User user) {
+    public String myPageReservList(Model model) {
 
         model.addAttribute("reservations", reservationService.findAll());
         return "/admin/adminReservationList";

@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Item;
+import tyml.reservationshop.domain.Place;
 import tyml.reservationshop.repository.ItemRepository;
 
 import java.util.List;
@@ -19,6 +20,18 @@ public class ItemService {
     public Long join(Item item) {
         itemRepository.save(item);
         return item.getId();
+    }
+
+    @Transactional
+    public void saveAll(List<Item> items) {
+        itemRepository.saveAll(items);
+    }
+
+    @Transactional
+    public void deleteItem(Long itemId) {
+        Item findItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + itemId));
+        itemRepository.delete(findItem);
     }
 
     public Item findOne(Long itemId) {
