@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tyml.reservationshop.domain.Item;
 import tyml.reservationshop.domain.Place;
+import tyml.reservationshop.domain.dto.ItemModifyForm;
 import tyml.reservationshop.repository.ItemRepository;
 
 import java.util.List;
@@ -25,6 +26,14 @@ public class ItemService {
     @Transactional
     public void saveAll(List<Item> items) {
         itemRepository.saveAll(items);
+    }
+
+    @Transactional
+    public void updateItem(Long itemId, ItemModifyForm itemModifyForm){
+        Item findItem = itemRepository.findById(itemId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid item ID: " + itemId));
+
+        findItem.updateItem(itemModifyForm);
     }
 
     @Transactional

@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import tyml.reservationshop.domain.dto.ItemModifyForm;
 
 @Getter
 @Entity
@@ -33,6 +34,12 @@ public class Item {
         this.price = price;
         this.uploadImageFileName = uploadImageFileName;
         this.place = place;
+    }
+
+    public void updateItem(ItemModifyForm itemModifyForm) {
+        this.itemName = itemModifyForm.getItemName();
+        this.price = itemModifyForm.getPrice();
+        this.uploadImageFileName = itemModifyForm.getUploadImageFileName();
     }
 
 }

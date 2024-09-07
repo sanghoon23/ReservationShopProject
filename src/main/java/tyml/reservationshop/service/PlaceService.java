@@ -69,6 +69,15 @@ public class PlaceService {
         findPlace.getItems().clear();
     }
 
+    @Transactional
+    public void deleteItemInPlaceItemList(Long placeId, Item item) {
+
+        Place findPlace = placeRepository.findById(placeId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid place ID: " + placeId));
+
+        findPlace.getItems().remove(item);
+    }
+
 
     @Transactional
     public void deleteReservation(Long placeId, Long reservationId) {

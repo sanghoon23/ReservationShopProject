@@ -62,6 +62,7 @@
         .error {
             border: 1px solid red;
         }
+
         .error-message {
             color: red;
             font-size: small;
@@ -82,7 +83,7 @@
     <div class="row w-100">
         <div class="col-md-7 col-lg-8">
             <h4 class="pt-3">장소 수정</h4>
-            <form class="needs-validation" novalidate
+            <form class="needs-validation" novalidate id="placeForm"
                   th:action="@{/place/modifyPlaceForm/{placeId}(placeId=${placeId})}" th:object="${placeForm}"
                   method="post" enctype="multipart/form-data">
 
@@ -173,7 +174,8 @@
 
                                     <div class="col-md-3">
                                         <label class="form-label">상품명</label>
-                                        <input type="text" th:value="${item.itemName}" th:name="'itemName_' + ${item.id}"
+                                        <input type="text" th:value="${item.itemName}"
+                                               th:name="'itemName_' + ${item.id}"
                                                class="form-control" placeholder="상품명">
                                     </div>
                                     <div class="col-md-3">
@@ -187,7 +189,8 @@
                                             <button type="button" class="btn btn-secondary"
                                                     onclick="this.nextElementSibling.click()">파일 선택
                                             </button>
-                                            <input type="file" th:value="${item.uploadImageFileName}" th:name="'newImage_' + ${item.id}" class="form-control"
+                                            <input type="file" th:value="${item.uploadImageFileName}"
+                                                   th:name="'newImage_' + ${item.id}" class="form-control"
                                                    accept="image/*" onchange="previewImage(this)"
                                                    style="display: none;">
                                             <img class="image-preview ms-3"
@@ -195,8 +198,11 @@
                                                  style="max-width: 80px; height: auto;">
 
                                             <!-- 파일이 선택되지 않아도 기존 값을 보내기 위한 hidden input -->
-                                            <input type="hidden" th:value="${item.uploadImageFileName}" th:name="'uploadImageFileName_' + ${item.id}">
-                                                <input type="hidden" id="deleteAble" th:value="false" th:name="'delete' + ${item.id}">
+                                            <input type="hidden" th:value="${item.uploadImageFileName}"
+                                                   th:name="'uploadImageFileName_' + ${item.id}">
+                                        </div>
+                                        <div>
+                                            <input type="hidden" class="deleteAble" th:value="${item.id}">
                                         </div>
                                     </div>
                                     <div class="col-md-3">
@@ -308,13 +314,24 @@
     }
 
     function removeProduct(button) {
-        var productItem = button.closest('.product-item');
+        let productItem = button.closest('.product-item');
+        let deleteAbleInput = productItem.querySelector('.deleteAble');
+        let itemId = deleteAbleInput ? deleteAbleInput.value : null;
         productItem.remove();
 
-        var deleteBox = document.getElementById('deleteAble');
-        if(deleteBox) {
-            deleteBox.value = "true";
-        }
+        // form 요소 가져오기
+        let form = document.getElementById('placeForm');
+
+        // 삭제된 상품 정보를 form에 동적으로 추가
+        let input = document.createElement('input');
+        input.type = 'hidden';
+        input.name = 'delete_' + itemId;
+        input.value = "true";
+        form.appendChild(input);
+
+        console.log(form);
+        console.log(itemId);
+        console.log(input.name);
     }
 
 
