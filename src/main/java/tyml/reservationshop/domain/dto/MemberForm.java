@@ -1,5 +1,6 @@
 package tyml.reservationshop.domain.dto;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
@@ -34,6 +35,9 @@ public class MemberForm {
     private String mainAddress = " ";
 
     private String detailAddress = " ";
+
+    @AssertTrue(message = "이메일 인증이 완료되어야 합니다.")
+    private boolean emailAuthCheck = false;
 
     public MemberForm() {}
     public MemberForm(Member member) {

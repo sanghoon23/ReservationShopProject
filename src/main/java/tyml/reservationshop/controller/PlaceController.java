@@ -79,11 +79,16 @@ public class PlaceController {
     @PostMapping("/place/createPlaceForm")
     public String createPlaceForm(@Valid PlaceForm placeForm,
                                   BindingResult bindingResult,
+                                  @RequestParam(value = "cancel", required = false) String cancel,
                                   @RequestParam(value = "mainImage", required = false) MultipartFile image,
                                   @RequestParam(value = "productName[]", required = false) List<String> productNames,
                                   @RequestParam(value = "productPrice[]", required = false) List<Integer> productPrices,
                                   @RequestParam(value = "productImage[]", required = false) List<MultipartFile> productImages,
                                   Model model) {
+
+        if ("true".equals(cancel)) {
+            return "redirect:/admin/placeList";
+        }
 
         if (bindingResult.hasErrors()) {
             return "/place/createPlaceForm";
