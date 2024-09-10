@@ -49,7 +49,7 @@
 
 <img width="30%" src="https://github.com/user-attachments/assets/c6c6acb1-7136-4339-b8cf-c03d8e7f09d9"/>
 <br/><br/>
-네이버 예약 시스템을 바탕으로 모방하여 개발한 개인 프로젝트입니다.
+네이버 예약 시스템을 바탕으로 개발한 개인 프로젝트입니다.
 
 <br/><br/>
 ## 구현 기능
