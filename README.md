@@ -53,7 +53,6 @@
 
 <br/><br/>
 ## 구현 기능
-<br/>
 
 <img width="30%" src="https://github.com/user-attachments/assets/e2b4277c-3264-4621-8769-4e02ae43729a"/>
 <img width="30%" src="https://github.com/user-attachments/assets/9b456263-b0b0-4592-95ac-b58376db2371"/>
