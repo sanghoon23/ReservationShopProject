@@ -55,17 +55,17 @@
 ## 구현 기능
 <br/>
 
-<img width="30%" src="https://github.com/user-attachments/assets/c2ca4712-2a46-47ad-9171-134af23f909b"/>
-<img width="30%" src="https://github.com/user-attachments/assets/1bcc7d67-7fef-46dd-ae25-03cd2ced99ba"/>
-<img width="30%" src="https://github.com/user-attachments/assets/4b8166df-f1ab-4a38-9f3c-1a0d6a6952c8"/>
+<img width="33%" src="https://github.com/user-attachments/assets/c2ca4712-2a46-47ad-9171-134af23f909b"/>
+<img width="33%" src="https://github.com/user-attachments/assets/1bcc7d67-7fef-46dd-ae25-03cd2ced99ba"/>
+<img width="33%" src="https://github.com/user-attachments/assets/4b8166df-f1ab-4a38-9f3c-1a0d6a6952c8"/>
 <br/>
-<img width="30%" src="https://github.com/user-attachments/assets/9cbb7158-ae35-404b-8004-d51174c1d622"/>
-<img width="30%" src="https://github.com/user-attachments/assets/bb063b1d-2022-4404-a4c8-5b8f29c82482"/>
-<img width="30%" src="https://github.com/user-attachments/assets/43bd86df-7b0f-4bc4-a1ab-1ff05774087d"/>
+<img width="33%" src="https://github.com/user-attachments/assets/9cbb7158-ae35-404b-8004-d51174c1d622"/>
+<img width="33%" src="https://github.com/user-attachments/assets/bb063b1d-2022-4404-a4c8-5b8f29c82482"/>
+<img width="33%" src="https://github.com/user-attachments/assets/43bd86df-7b0f-4bc4-a1ab-1ff05774087d"/>
 <br/>
-<img width="30%" src="https://github.com/user-attachments/assets/5d9d0fbe-97f1-4e8e-adb2-5927eb741b86"/>
-<img width="30%" src="https://github.com/user-attachments/assets/ebfc0cfb-9c16-4555-82d5-cb191f1f0cf2"/>
-<img width="30%" src="https://github.com/user-attachments/assets/47ca9394-d22e-435f-8db4-fbec7701a129"/>
+<img width="33%" src="https://github.com/user-attachments/assets/5d9d0fbe-97f1-4e8e-adb2-5927eb741b86"/>
+<img width="33%" src="https://github.com/user-attachments/assets/ebfc0cfb-9c16-4555-82d5-cb191f1f0cf2"/>
+<img width="33%" src="https://github.com/user-attachments/assets/47ca9394-d22e-435f-8db4-fbec7701a129"/>
 
 
 
