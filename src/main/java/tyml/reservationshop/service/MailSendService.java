@@ -10,6 +10,7 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import tyml.reservationshop.service.util.UtilRedis;
 
+import java.util.Optional;
 import java.util.Random;
 
 @Slf4j
@@ -37,12 +38,12 @@ public class MailSendService {
 
     public boolean correctAuthNum(String email, String authNumber) {
 
-        String getDate = utilRedis.getDate(authNumber);
-        if(getDate == null)
-        {
-            return false;
-        }
-        return getDate.equals(email);
+        String a = utilRedis.getDate(email);
+
+        return Optional.ofNullable(utilRedis.getDate(email))
+                .map(date -> date.equals(authNumber))  // 값이 존재할 경우 비교
+                .orElse(false);  // 값이 없으면 false 반환
+
     }
 
     public String sendEmail(String email) {
@@ -74,7 +75,7 @@ public class MailSendService {
             mailSender.send(message);
 
             //redis 인증번호 저장
-            utilRedis.setDataAndTime(authNumber, toMail, 60*5L);
+            utilRedis.setDataAndTime(toMail, authNumber, 60*5L);
 
         } catch (MessagingException e) {
             log.error("Failed to send email to {}", toMail, e);

@@ -66,7 +66,8 @@ public class MemberController {
     }
 
     @PostMapping("/members/createMemberForm")
-    public String createMemberForm(@Valid MemberForm memberForm, BindingResult bindingResult) {
+    public String createMemberForm(@Valid MemberForm memberForm,
+                                   BindingResult bindingResult) {
 
         if (bindingResult.hasErrors()) {
             return "/members/createMemberForm";
@@ -142,9 +143,5 @@ public class MemberController {
     }
 
     //*************************************************************************
-
-
-
-
 
 }
