@@ -145,6 +145,10 @@
             <label for="password">비밀번호</label>
         </div>
 
+
+        <!--https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}-->
+
+
         <div class="form-floating button-container">
             <a th:href="@{/oauth2/authorization/kakao}">
                 <img src="/images/logo/kakao_login_logo.png" class ="image-button" >
@@ -152,6 +156,7 @@
             <a th:href="@{/oauth2/authorization/naver}">
                 <img src="/images/logo/naver_login_logo.png" class ="image-button">
             </a>
+
             <a th:href="@{/oauth2/authorization/google}">
                 <img src="/images/logo/google_login_logo.png" class ="image-button">
             </a>

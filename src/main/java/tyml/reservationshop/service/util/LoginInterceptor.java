@@ -1,6 +1,5 @@
     package tyml.reservationshop.service.util;
 
-    import lombok.RequiredArgsConstructor;
     import lombok.extern.slf4j.Slf4j;
     import jakarta.servlet.http.HttpServletRequest;
     import jakarta.servlet.http.HttpServletResponse;
@@ -16,10 +15,11 @@
 
     @Slf4j
     @Component
-    @RequiredArgsConstructor
     public class LoginInterceptor implements HandlerInterceptor {
 
-        private final RequestCache requestCache;
+
+        @Autowired
+        private RequestCache requestCache;
 
         @Override
         public boolean preHandle(HttpServletRequest request,

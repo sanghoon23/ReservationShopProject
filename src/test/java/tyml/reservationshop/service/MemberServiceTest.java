@@ -15,23 +15,23 @@ import tyml.reservationshop.service.user.MemberService;
 @Transactional
 class MemberServiceTest {
 
-//    @Autowired private MemberRepository memberRepository;
-//    @Autowired private MemberService memberService;
-//    @Autowired private EntityManager em;
+    @Autowired private MemberRepository memberRepository;
+    @Autowired private MemberService memberService;
+    @Autowired private EntityManager em;
 
-//    @Test
-//    public void 회원가입_테스트() {
-//
-//        MemberForm form = new MemberForm();
-//        Address address = new Address("123", "서울특별시","123");
-//        Member member = new Member(form);
-//        memberService.join(member);
-//    }
-//
-//    @Test
-//    public void 회원목록_테스트()  {
-//
-//    }
+    @Test
+    public void 회원가입_테스트() {
+
+        MemberForm form = new MemberForm();
+        Address address = new Address("123", "서울특별시","123");
+        Member member = new Member(form);
+        memberService.join(member);
+    }
+
+    @Test
+    public void 회원목록_테스트()  {
+
+    }
 
 
 

@@ -61,11 +61,12 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             userInfo = new KakaoUserInfo(oAuth2User.getAttribute("kakao_account"));
         }
         else if (provider.equals("naver")) {
-            userInfo = new NaverUserInfo((Map<String, Object>)oAuth2User.getAttributes().get("response"));
+            userInfo = new NaverUserInfo((Map)oAuth2User.getAttributes().get("response"));
         }
         else if (provider.equals("google")) {
             userInfo = new GoogleUserInfo(oAuth2User.getAttributes());
         }
+
 
         String username = providerTypeCode + '_' + userInfo.getName();
         String email = userInfo.getEmail();
