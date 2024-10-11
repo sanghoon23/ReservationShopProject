@@ -1,30 +1,30 @@
 // URL에서 파라미터를 가져오는 함수
 function getUrlDetailNumber() {
-    var regex = /detail\/(\d+)/;
-    var match = regex.exec(window.location.href);
+    let regex = /detail\/(\d+)/;
+    let match = regex.exec(window.location.href);
     return match ? match[1] : '';
 }
 
 function addCommentToDOM(comment) {
 
-    var placeId = getUrlDetailNumber();
+    let placeId = getUrlDetailNumber();
 
-    var commentDiv = $('<div class="comment"></div>');
+    let commentDiv = $('<div class="comment"></div>');
 
-    var headerDiv = $('<div class="comment-header"></div>');
+    let headerDiv = $('<div class="comment-header"></div>');
 
-    var userDiv = $('<div class="comment-user"></div>').text(comment.userName);
-    var dateDiv = $('<div class="comment-date"></div>').text(comment.createDateTime);
+    let userDiv = $('<div class="comment-user"></div>').text(comment.userName);
+    let dateDiv = $('<div class="comment-date"></div>').text(comment.createDateTime);
     headerDiv.append(userDiv);
     headerDiv.append(dateDiv);
 
-    var contentDiv = $('<div class="comment-content"></div>').text(comment.content);
+    let contentDiv = $('<div class="comment-content"></div>').text(comment.content);
     commentDiv.append(headerDiv);
     commentDiv.append(contentDiv);
 
     if (comment.userId === comment.currentUserId) {
-        var editButton = $('<button class="edit-comment">수정</button>').click(function () {
-            var newContent = prompt('수정할 내용을 입력하세요:', comment.content);
+        let editButton = $('<button class="edit-comment">수정</button>').click(function () {
+            let newContent = prompt('수정할 내용을 입력하세요:', comment.content);
             if (newContent) {
                 $.ajax({
                     url: '/api/place/' + placeId + '/comment/update/' + comment.commentId,
@@ -43,7 +43,7 @@ function addCommentToDOM(comment) {
             }
         });
 
-        var deleteButton = $('<button class="delete-comment">삭제</button>').click(function () {
+        let deleteButton = $('<button class="delete-comment">삭제</button>').click(function () {
             if (confirm('정말 삭제하시겠습니까?')) {
                 $.ajax({
                     url: '/api/place/' + placeId + '/comment/delete/' + comment.commentId,
@@ -68,14 +68,14 @@ function addCommentToDOM(comment) {
 
 
 function loadMap() {
-    var placeId = getUrlDetailNumber();
+    let placeId = getUrlDetailNumber();
 
     $.ajax({
         url: '/api/place/map/detail/' + placeId,
         method: 'GET',
         dataType: 'json',
         success: function (data) {
-            var address = data.mainAddress + ', ' + data.detailAddress;
+            let address = data.mainAddress + ', ' + data.detailAddress;
             searchAddress(address); // 주소로 지도 검색
         },
         error: function (error) {
@@ -85,7 +85,7 @@ function loadMap() {
 }
 
 function loadComments(){
-    var placeId = getUrlDetailNumber();
+    let placeId = getUrlDetailNumber();
     $.ajax({
         url: '/api/place/commentList/' + placeId,
         method: 'GET',
@@ -109,8 +109,8 @@ loadComments();
 $('#commentForm').off('submit').on('submit', function(event) {
     event.preventDefault(); // 기본 폼 제출 방지
 
-    var content = $('#commentContent').val();
-    var placeId = getUrlDetailNumber();
+    let content = $('#commentContent').val();
+    let placeId = getUrlDetailNumber();
 
     $.ajax({
         url: '/api/place/comment/add/' + placeId,

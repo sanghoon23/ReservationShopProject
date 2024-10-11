@@ -25,10 +25,10 @@ public class UtilRedis {
         getValueOperations().set(key, value);
     }
 
-        public void setDataAndTime(String key, String value, long time) {
-            getValueOperations().set(key, value);
-            redisTemplate.expire(key, Duration.ofSeconds(time));
-        }
+    public void setDataAndTime(String key, String value, long time) {
+        getValueOperations().set(key, value);
+        redisTemplate.expire(key, Duration.ofSeconds(time));
+    }
 
     public void deleteData(String key) {
         redisTemplate.delete(key);

@@ -24,7 +24,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         registry.addInterceptor(loginInterceptor)
                 .addPathPatterns("/api/place/comment/add/**")
                 .addPathPatterns("/place/placeList")
-                .addPathPatterns("/reservation/createReservationForm")
+                .addPathPatterns("/reservation/createReservationForm/**")
                 .order(1); // 순서 설정
     }
 

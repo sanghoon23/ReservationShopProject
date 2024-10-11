@@ -194,9 +194,9 @@ public class PlaceController {
                 if (isDeleted) {
                     Item findItem = itemService.findOne(itemId);
                     //@이미지 제거
-                    if(findItem.getUploadImageFileName() != null && !findItem.getUploadImageFileName().isEmpty()){
+                    if (findItem.getUploadImageFileName() != null && !findItem.getUploadImageFileName().isEmpty()) {
 
-                    deleteImage(findItem.getUploadImageFileName());
+                        deleteImage(findItem.getUploadImageFileName());
                     }
                     itemService.deleteItem(itemId);
                     placeService.deleteItemInPlaceItemList(placeId, findItem);
@@ -232,7 +232,7 @@ public class PlaceController {
             for (int i = 0; i < productNames.size(); ++i) {
 
                 String InputUploadImageFileName = "";
-                if(productImages.get(i) != null && !productImages.get(i).isEmpty()){
+                if (productImages.get(i) != null && !productImages.get(i).isEmpty()) {
                     InputUploadImageFileName = saveImage(productImages.get(i));
                 }
 
@@ -297,32 +297,5 @@ public class PlaceController {
             throw new RuntimeException("Failed to delete file " + fileName, e);
         }
     }
-
-//    public MultipartFile getMultipartFileFromSavedImage(String fileName) {
-//        try {
-//            // 저장된 파일 경로
-//            String uploadDir = potoUploadPath;
-//            File file = new File(uploadDir, fileName);
-//
-//            // 원래 파일 이름 추출
-//            String originalFileName = fileName.substring(fileName.indexOf('_') + 1);
-//
-//            // 파일을 읽어서 byte 배열로 변환
-//            FileInputStream input = new FileInputStream(file);
-//            byte[] content = FileCopyUtils.copyToByteArray(input);
-//
-//            // MockMultipartFile을 이용하여 MultipartFile로 변환
-//            MultipartFile multipartFile = new MockMultipartFile(
-//                    "file",             // 필드명
-//                    originalFileName,   // 원본 파일명
-//                    "image/jpeg",       // MIME 타입 (파일 확장자에 맞게 변경 가능)
-//                    content             // 파일 내용
-//            );
-//
-//            return multipartFile;
-//        } catch (IOException e) {
-//            throw new RuntimeException("Failed to convert file to MultipartFile", e);
-//        }
-//    }
 
 }
