@@ -99,7 +99,7 @@ public class ReservationController {
         List<Item> items;
         Member member;
         ReservationForm reservationForm;
-
+        
         items = getSessionAttribute(session, "items", List.class);
         member = getSessionAttribute(session, "member", Member.class);
         reservationForm = getSessionAttribute(session, "reservationForm", ReservationForm.class);

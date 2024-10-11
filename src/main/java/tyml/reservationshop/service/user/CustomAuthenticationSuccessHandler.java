@@ -3,6 +3,7 @@ package tyml.reservationshop.service.user;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
@@ -17,13 +18,14 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import java.io.IOException;
 
 @Slf4j
+@RequiredArgsConstructor
 public class CustomAuthenticationSuccessHandler implements AuthenticationSuccessHandler {
 
     @Value("${admin.id}")
     private String adminId;
 
-    private final RequestCache requestCache = new HttpSessionRequestCache();
-    private final RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private final RequestCache requestCache;
+    private final RedirectStrategy redirectStrategy;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
@@ -52,5 +54,4 @@ public class CustomAuthenticationSuccessHandler implements AuthenticationSuccess
         }
         response.sendRedirect(redirectUrl);
     }
-
 }

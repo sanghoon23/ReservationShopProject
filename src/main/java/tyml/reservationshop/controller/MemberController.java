@@ -84,11 +84,9 @@ public class MemberController {
         try {
             memberService.join(member);
         } catch (DataIntegrityViolationException e) { //@Email 중복 Exception
-            e.printStackTrace();
             bindingResult.rejectValue("email", "signupFailed", "이미 등록된 사용자입니다.");
             return "/members/createMemberForm";
         } catch (Exception e) {
-            e.printStackTrace();
             bindingResult.reject("signupFailed", e.getMessage());
             return "/members/createMemberForm";
         }

@@ -153,9 +153,9 @@
 
 <script>
     document.getElementById('mainImage').onchange = function (event) {
-        var reader = new FileReader();
+        let reader = new FileReader();
         reader.onload = function () {
-            var output = document.getElementById('imagePreview');
+            let output = document.getElementById('imagePreview');
             output.src = reader.result;
             output.style.display = 'block';
         };
@@ -164,9 +164,9 @@
 
     // 상품 추가 및 삭제 스크립트
     function addProduct() {
-        var productContainer = document.getElementById('productContainer');
+        let productContainer = document.getElementById('productContainer');
 
-        var productItem = document.createElement('div');
+        let productItem = document.createElement('div');
         productItem.className = 'row product-item';
 
         productItem.innerHTML = `
@@ -196,10 +196,10 @@
 
     function previewImage(input) {
         if (input.files && input.files[0]) {
-            var reader = new FileReader();
+            let reader = new FileReader();
 
             reader.onload = function (e) {
-                var imgElement = input.nextElementSibling; // input 다음에 위치한 img 요소를 찾음
+                let imgElement = input.nextElementSibling; // input 다음에 위치한 img 요소를 찾음
                 imgElement.src = e.target.result;
                 imgElement.style.display = 'block';
             };
@@ -209,7 +209,7 @@
     }
 
     function removeProduct(button) {
-        var productItem = button.parentElement.parentElement;
+        let productItem = button.parentElement.parentElement;
         productItem.remove();
     }
 
